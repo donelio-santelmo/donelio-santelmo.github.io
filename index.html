@@ -4,12 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Don Elio — Parrilla de San Telmo</title>
-  <meta name="description" content="Parrilla auténtica porteña en el corazón de San Telmo. Brasas, tradición y sabor desde siempre. Chacabuco 454, CABA." />
-
-  <!-- Tailwind CSS -->
+  <meta name="description" content="Parrilla auténtica porteña en San Telmo. Brasas, tradición y sabor. Chacabuco 454, CABA." />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts: Playfair + Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -18,40 +14,15 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            ember: '#FF4D00',
-            charcoal: '#0D0D0D',
-            ash: '#1A1A1A',
-            smoke: '#2A2A2A',
-            gold: '#D4A017',
-          },
-          fontFamily: {
-            display: ['"Playfair Display"', 'Georgia', 'serif'],
-            body: ['Inter', 'system-ui', 'sans-serif'],
-          },
+          colors: { ember: '#FF4D00', charcoal: '#0D0D0D', ash: '#1A1A1A', smoke: '#2A2A2A', gold: '#D4A017' },
+          fontFamily: { display: ['"Playfair Display"', 'serif'], body: ['Inter', 'sans-serif'] },
           keyframes: {
-            flicker: {
-              '0%,100%': { opacity: '1' },
-              '50%': { opacity: '0.85' },
-            },
-            slideUp: {
-              from: { opacity: '0', transform: 'translateY(24px)' },
-              to: { opacity: '1', transform: 'translateY(0)' },
-            },
-            pulse2: {
-              '0%,100%': { boxShadow: '0 0 0 0 rgba(255,77,0,0.4)' },
-              '50%': { boxShadow: '0 0 0 12px rgba(255,77,0,0)' },
-            },
-            spin1: {
-              from: { transform: 'translateY(0)' },
-              to: { transform: 'translateY(-100%)' },
-            },
+            flicker: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.82' } },
+            badgePop: { '0%': { transform: 'scale(0.85)', opacity: '0' }, '70%': { transform: 'scale(1.04)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
           },
           animation: {
-            flicker: 'flicker 2s ease-in-out infinite',
-            slideUp: 'slideUp 0.6s ease forwards',
-            pulsering: 'pulse2 2s ease-in-out infinite',
-            spin1: 'spin1 0.12s linear',
+            flicker: 'flicker 2.2s ease-in-out infinite',
+            badgePop: 'badgePop 0.45s ease forwards',
           },
         },
       },
@@ -59,86 +30,38 @@
   </script>
 
   <style>
-    /* ── Base ── */
     html { scroll-behavior: smooth; }
     body { background-color: #0D0D0D; color: #E5E5E5; font-family: 'Inter', sans-serif; }
 
-    /* ── Fileteado-style heading ── */
-    .fileteado {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-    }
+    .fileteado { font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em; line-height: 1.05; }
 
-    /* ── Ember glow on focus/hover ── */
-    .ember-glow { transition: box-shadow 0.3s, border-color 0.3s; }
-    .ember-glow:hover { box-shadow: 0 0 20px rgba(255,77,0,0.35); }
+    .ember-glow { transition: box-shadow 0.25s; }
+    .ember-glow:hover { box-shadow: 0 0 18px rgba(255,77,0,0.4); }
 
-    /* ── Section fade-in on scroll ── */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── Slot machine window ── */
-    .slot-window {
-      overflow: hidden;
-      height: 2.5rem;
-      position: relative;
-    }
-    .slot-reel {
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.08s linear;
-    }
-    .slot-item {
-      height: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-      font-weight: 600;
-    }
+    .slot-window { overflow: hidden; height: 2.5rem; }
+    .slot-reel { display: flex; flex-direction: column; }
+    .slot-item { height: 2.5rem; display: flex; align-items: center; justify-content: center; white-space: nowrap; font-weight: 600; }
 
-    /* ── Fire gradient header ── */
-    .fire-header {
-      background: radial-gradient(ellipse at top, #3a1200 0%, #0D0D0D 60%);
-    }
+    #fire-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    nav, header, section, footer, #surprise-modal { position: relative; z-index: 1; }
 
-    /* ── Promo badge ── */
-    @keyframes badgePop {
-      0% { transform: scale(0.8); opacity: 0; }
-      70% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .badge-pop { animation: badgePop 0.5s ease forwards; }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #1A1A1A; }
     ::-webkit-scrollbar-thumb { background: #FF4D00; border-radius: 3px; }
-
-    /* ── Fire canvas ── */
-    #fire-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    nav, header, section, footer, #surprise-modal { position: relative; z-index: 1; }
   </style>
 </head>
 <body class="antialiased">
 
 <canvas id="fire-canvas"></canvas>
 
-<!-- ══════════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════════ -->
+<!-- NAVBAR -->
 <nav class="fixed top-0 w-full z-50 bg-charcoal/90 backdrop-blur border-b border-smoke">
-  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+  <div class="max-w-4xl mx-auto px-4 h-13 flex items-center justify-between">
     <span class="fileteado text-ember text-xl">Don Elio</span>
-    <div class="hidden sm:flex gap-6 text-sm text-gray-400">
+    <div class="hidden sm:flex gap-5 text-sm text-gray-400">
       <a href="#promo" class="hover:text-ember transition-colors">Promo</a>
       <a href="#menu" class="hover:text-ember transition-colors">Carta</a>
       <a href="#nosotros" class="hover:text-ember transition-colors">Nosotros</a>
@@ -151,61 +74,48 @@
   </div>
 </nav>
 
-
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<header class="fire-header min-h-screen flex flex-col items-center justify-center text-center px-4 pt-14">
-  <!-- Flame emoji animated -->
-  <div class="text-6xl mb-4 animate-flicker select-none">🔥</div>
-
-  <h1 class="fileteado text-5xl sm:text-7xl text-white mb-3">
-    Don Elio
-  </h1>
-  <p class="text-ember font-semibold text-lg sm:text-xl tracking-widest uppercase mb-2">
-    Parrilla · San Telmo
-  </p>
-  <p class="text-gray-400 max-w-sm sm:max-w-md text-base sm:text-lg leading-relaxed mb-8">
+<!-- HERO -->
+<header class="min-h-[88vh] flex flex-col items-center justify-center text-center px-4 pt-14"
+        style="background: radial-gradient(ellipse at top, #3a1200 0%, #0D0D0D 60%)">
+  <div class="text-5xl mb-3 animate-flicker select-none">🔥</div>
+  <h1 class="fileteado text-5xl sm:text-7xl text-white mb-2">Don Elio</h1>
+  <p class="text-ember font-semibold text-base sm:text-lg tracking-widest uppercase mb-2">Parrilla · San Telmo</p>
+  <p class="text-gray-400 max-w-xs sm:max-w-sm text-sm sm:text-base leading-relaxed mb-6">
     Brasas auténticas, sabor porteño de ley.<br/>
-    <span class="text-gray-500 text-sm">Chacabuco 454, San Telmo — Buenos Aires</span>
+    <span class="text-gray-500 text-xs">Chacabuco 454, San Telmo — Buenos Aires</span>
   </p>
 
-  <!-- Live Roast Tracker -->
-  <div id="roast-tracker" class="mb-8 px-5 py-3 rounded-full border flex items-center gap-3 text-sm font-medium transition-all duration-500">
-    <span id="roast-dot" class="w-3 h-3 rounded-full inline-block"></span>
+  <div id="roast-tracker" class="mb-6 px-4 py-2 rounded-full border flex items-center gap-2 text-sm font-medium transition-all duration-500">
+    <span id="roast-dot" class="w-2.5 h-2.5 rounded-full inline-block"></span>
     <span id="roast-text"></span>
   </div>
 
   <div class="flex flex-col sm:flex-row gap-3">
-    <a href="#promo" class="bg-ember hover:bg-orange-600 text-white font-semibold px-7 py-3 rounded-full ember-glow transition-all">
+    <a href="#promo" class="bg-ember hover:bg-orange-600 text-white font-semibold px-6 py-2.5 rounded-full ember-glow transition-all text-sm">
       Ver promo de hoy
     </a>
     <button onclick="openSurprise()"
-            class="border border-ember text-ember hover:bg-ember/10 font-semibold px-7 py-3 rounded-full transition-all ember-glow">
+            class="border border-ember text-ember hover:bg-ember/10 font-semibold px-6 py-2.5 rounded-full transition-all ember-glow text-sm">
       ✨ Sorprendeme Elio
     </button>
   </div>
 </header>
 
+<!-- PROMO DEL DÍA -->
+<section id="promo" class="py-12 px-4 bg-ash reveal">
+  <div class="max-w-lg mx-auto text-center">
+    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1">Hoy te toca</p>
+    <h2 class="fileteado text-3xl sm:text-4xl text-white mb-5">Promo del Día</h2>
 
-<!-- ══════════════════════════════════════════
-     PROMO DEL DÍA
-══════════════════════════════════════════ -->
-<section id="promo" class="py-20 px-4 bg-ash reveal">
-  <div class="max-w-2xl mx-auto text-center">
-    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-2">Hoy te toca</p>
-    <h2 class="fileteado text-4xl sm:text-5xl text-white mb-8">Promo del Día</h2>
-
-    <div id="promo-card"
-         class="badge-pop bg-smoke border border-ember/40 rounded-2xl p-8 sm:p-10 ember-glow">
-      <div class="text-5xl mb-4" id="promo-emoji">🥩</div>
-      <div class="text-ember text-xs font-bold tracking-widest uppercase mb-1" id="promo-day">Día</div>
-      <h3 class="fileteado text-3xl text-white mb-3" id="promo-title">Cargando...</h3>
-      <p class="text-gray-400 text-base" id="promo-desc"></p>
-      <div class="mt-6">
+    <div id="promo-card" class="animate-badgePop bg-smoke border border-ember/40 rounded-2xl p-6 ember-glow">
+      <div class="text-4xl mb-3" id="promo-emoji">🥩</div>
+      <div class="text-ember text-xs font-bold tracking-widest uppercase mb-1" id="promo-day">—</div>
+      <h3 class="fileteado text-2xl text-white mb-2" id="promo-title">Cargando...</h3>
+      <p class="text-gray-400 text-sm" id="promo-desc"></p>
+      <div class="mt-5">
         <a id="promo-wa" href="#" target="_blank"
-           class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-full transition-all ember-glow">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+           class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-2.5 rounded-full transition-all ember-glow text-sm">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Pedir esta promo
         </a>
       </div>
@@ -213,382 +123,255 @@
   </div>
 </section>
 
+<!-- CARTA -->
+<section id="menu" class="py-12 px-4 reveal">
+  <div class="max-w-3xl mx-auto">
+    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1 text-center">A las brasas</p>
+    <h2 class="fileteado text-3xl sm:text-4xl text-white text-center mb-6">Nuestra Carta</h2>
 
-<!-- ══════════════════════════════════════════
-     CARTA / MENÚ
-══════════════════════════════════════════ -->
-<section id="menu" class="py-20 px-4 reveal">
-  <div class="max-w-4xl mx-auto">
-    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-2 text-center">A las brasas</p>
-    <h2 class="fileteado text-4xl sm:text-5xl text-white text-center mb-12">Nuestra Carta</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
 
-    <div class="grid sm:grid-cols-2 gap-6">
       <!-- Parrilla -->
-      <div class="bg-ash border border-smoke rounded-2xl p-6">
-        <h3 class="text-ember font-bold text-sm tracking-widest uppercase mb-4">🥩 Parrilla</h3>
-        <ul class="space-y-3">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Asado Banderita" data-price="$6.500">
-            <span>Asado Banderita</span><span class="text-gray-500">$6.500</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Entraña" data-price="$7.200">
-            <span>Entraña</span><span class="text-gray-500">$7.200</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vacío" data-price="$6.800">
-            <span>Vacío</span><span class="text-gray-500">$6.800</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Tira de Asado" data-price="$7.500">
-            <span>Tira de Asado</span><span class="text-gray-500">$7.500</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Bondiola" data-price="$5.900">
-            <span>Bondiola</span><span class="text-gray-500">$5.900</span>
-          </li>
+      <div class="bg-ash border border-smoke rounded-xl p-5">
+        <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🥩 Parrilla</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vacío" data-price="$16.000"><span>Vacío</span><span class="text-gray-500">$16.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Entraña" data-price="$18.000"><span>Entraña</span><span class="text-gray-500">$18.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cuadril" data-price="$14.000"><span>Cuadril</span><span class="text-gray-500">$14.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Asado Banderita" data-price="$14.000"><span>Asado Banderita</span><span class="text-gray-500">$14.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Milanesa de Ternera" data-price="$10.000"><span>Milanesa de Ternera</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Bondiola" data-price="$10.000"><span>Bondiola</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Chorizo" data-price="$5.000"><span>Chorizo</span><span class="text-gray-500">$5.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Pata Muslo" data-price="$10.000"><span>Pata Muslo</span><span class="text-gray-500">$10.000</span></li>
         </ul>
       </div>
 
-      <!-- Sánguches y Embutidos -->
-      <div class="bg-ash border border-smoke rounded-2xl p-6">
-        <h3 class="text-ember font-bold text-sm tracking-widest uppercase mb-4">🌭 Sánguches & Embutidos</h3>
-        <ul class="space-y-3">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sánguche de Cuadril" data-price="$3.800">
-            <span>Sánguche de Cuadril</span><span class="text-gray-500">$3.800</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Choripán" data-price="$2.500">
-            <span>Choripán</span><span class="text-gray-500">$2.500</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Morcilla al Plato" data-price="$2.200">
-            <span>Morcilla al Plato</span><span class="text-gray-500">$2.200</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Mollejas a la Parrilla" data-price="$4.500">
-            <span>Mollejas a la Parrilla</span><span class="text-gray-500">$4.500</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Riñones al Verdeo" data-price="$3.900">
-            <span>Riñones al Verdeo</span><span class="text-gray-500">$3.900</span>
-          </li>
+      <!-- Sándwiches -->
+      <div class="bg-ash border border-smoke rounded-xl p-5">
+        <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🌭 Sándwiches</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Vacío" data-price="$12.000"><span>Sandwich de Vacío</span><span class="text-gray-500">$12.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Cuadril" data-price="$10.000"><span>Sandwich de Cuadril</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa" data-price="$10.000"><span>Sandwich de Milanesa</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa de Pollo" data-price="$10.000"><span>Sandwich Milanesa Pollo</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Bondiola" data-price="$10.000"><span>Sandwich de Bondiola</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Choripán" data-price="$6.000"><span>Choripán</span><span class="text-gray-500">$6.000</span></li>
         </ul>
       </div>
 
       <!-- Guarniciones -->
-      <div class="bg-ash border border-smoke rounded-2xl p-6">
-        <h3 class="text-ember font-bold text-sm tracking-widest uppercase mb-4">🍟 Guarniciones</h3>
-        <ul class="space-y-3">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Papas Fritas" data-price="$1.800">
-            <span>Papas Fritas</span><span class="text-gray-500">$1.800</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Ensalada Mixta" data-price="$1.500">
-            <span>Ensalada Mixta</span><span class="text-gray-500">$1.500</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Chimichurri Casero" data-price="$800">
-            <span>Chimichurri Casero</span><span class="text-gray-500">$800</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Dip de Criolla Especial" data-price="$900">
-            <span>Dip de Criolla Especial</span><span class="text-gray-500">$900</span>
-          </li>
+      <div class="bg-ash border border-smoke rounded-xl p-5">
+        <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🍟 Guarniciones</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Papas Fritas" data-price="$3.500"><span>Papas Fritas</span><span class="text-gray-500">$3.500</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Puré" data-price="$3.500"><span>Puré</span><span class="text-gray-500">$3.500</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Ensalada Mixta" data-price="$3.500"><span>Ensalada Mixta</span><span class="text-gray-500">$3.500</span></li>
         </ul>
       </div>
 
-      <!-- Pastas y Postres -->
-      <div class="bg-ash border border-smoke rounded-2xl p-6">
-        <h3 class="text-ember font-bold text-sm tracking-widest uppercase mb-4">🍝 Pastas & Postres</h3>
-        <ul class="space-y-3">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Pastas Caseras" data-price="$4.200">
-            <span>Pastas Caseras</span><span class="text-gray-500">$4.200</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Flan Casero con Dulce de Leche" data-price="$2.000">
-            <span>Flan con Dulce de Leche</span><span class="text-gray-500">$2.000</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Panqueques con Dulce de Leche" data-price="$2.200">
-            <span>Panqueques con D.L.</span><span class="text-gray-500">$2.200</span>
-          </li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Copa de Vino Malbec" data-price="$1.500">
-            <span>Copa de Vino Malbec</span><span class="text-gray-500">$1.500</span>
-          </li>
+      <!-- Bebidas -->
+      <div class="bg-ash border border-smoke rounded-xl p-5">
+        <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🍷 Bebidas</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Coca Cola" data-price="$4.000"><span>Coca Cola</span><span class="text-gray-500">$4.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Agua 500ml" data-price="$3.000"><span>Agua 500ml</span><span class="text-gray-500">$3.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza 361 500ml" data-price="$4.000"><span>Cerveza 361 500ml</span><span class="text-gray-500">$4.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza Heineken 500ml" data-price="$5.000"><span>Heineken 500ml</span><span class="text-gray-500">$5.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cordero con Piel de Lobo" data-price="$10.000"><span>Cordero con Piel de Lobo</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Privado" data-price="$12.000"><span>Vino Privado</span><span class="text-gray-500">$12.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Trampeter" data-price="$16.000"><span>Vino Trampeter</span><span class="text-gray-500">$16.000</span></li>
         </ul>
       </div>
-    </div>
 
-    <p class="text-center text-gray-600 text-sm mt-6">Tocá cualquier plato para pedirlo por WhatsApp</p>
+    </div>
+    <p class="text-center text-gray-600 text-xs mt-4">Tocá cualquier plato para pedirlo por WhatsApp</p>
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════════
-     NOSOTROS
-══════════════════════════════════════════ -->
-<section id="nosotros" class="py-20 px-4 bg-ash reveal">
-  <div class="max-w-3xl mx-auto text-center">
-    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-2">La historia</p>
-    <h2 class="fileteado text-4xl sm:text-5xl text-white mb-10">Quiénes Somos</h2>
-
-    <div class="grid sm:grid-cols-2 gap-6 mb-12">
-      <div class="bg-smoke border border-smoke rounded-2xl p-6 text-left">
-        <div class="text-4xl mb-3">👨‍🍳</div>
-        <h3 class="fileteado text-2xl text-ember mb-2">Eduardo</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">
-          Fundador y alma de Don Elio. Con más de 30 años encendiendo brasas, Eduardo aprendió el arte del asado de su padre y lo convirtió en una institución de San Telmo. Para él, el fuego es respeto, paciencia y amor a la buena mesa.
-        </p>
-      </div>
-      <div class="bg-smoke border border-smoke rounded-2xl p-6 text-left">
-        <div class="text-4xl mb-3">👨‍🔧</div>
-        <h3 class="fileteado text-2xl text-ember mb-2">Valentino</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">
-          Sobrino y heredero del fuego. Valentino trae la energía joven sin perder la esencia: madruga para elegir los mejores cortes en el mercado, y se queda hasta que el último cliente se va satisfecho. La parrilla del futuro, con raíces del pasado.
-        </p>
-      </div>
-    </div>
-
-    <!-- Valores -->
-    <div class="grid grid-cols-3 gap-4">
-      <div class="bg-smoke rounded-xl p-4">
-        <div class="text-3xl mb-2">🔥</div>
-        <p class="text-ember font-semibold text-sm">Fuego Real</p>
-        <p class="text-gray-500 text-xs mt-1">Leña y carbón, nunca gas</p>
-      </div>
-      <div class="bg-smoke rounded-xl p-4">
-        <div class="text-3xl mb-2">🐄</div>
-        <p class="text-ember font-semibold text-sm">Corte Propio</p>
-        <p class="text-gray-500 text-xs mt-1">Compramos la res entera</p>
-      </div>
-      <div class="bg-smoke rounded-xl p-4">
-        <div class="text-3xl mb-2">🤝</div>
-        <p class="text-ember font-semibold text-sm">Barrio</p>
-        <p class="text-gray-500 text-xs mt-1">San Telmo es nuestra casa</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     UBICACIÓN
-══════════════════════════════════════════ -->
-<section id="ubicacion" class="py-20 px-4 reveal">
+<!-- NOSOTROS -->
+<section id="nosotros" class="py-12 px-4 bg-ash reveal">
   <div class="max-w-2xl mx-auto text-center">
-    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-2">Cómo llegás</p>
-    <h2 class="fileteado text-4xl sm:text-5xl text-white mb-8">Encontranos</h2>
+    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1">La historia</p>
+    <h2 class="fileteado text-3xl sm:text-4xl text-white mb-6">Quiénes Somos</h2>
 
-    <div class="bg-ash border border-smoke rounded-2xl p-8 mb-6">
-      <div class="text-5xl mb-3">📍</div>
-      <p class="text-white text-xl font-semibold mb-1">Chacabuco 454</p>
-      <p class="text-gray-400 mb-4">San Telmo, Buenos Aires</p>
-      <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+    <div class="grid sm:grid-cols-2 gap-4 mb-6">
+      <div class="bg-smoke border border-smoke/60 rounded-xl p-5 text-left">
+        <div class="text-3xl mb-2">👨‍🍳</div>
+        <h3 class="fileteado text-xl text-ember mb-1">Eduardo</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">Fundador y alma de Don Elio. Con más de 30 años encendiendo brasas, convirtió la parrilla en una institución de San Telmo. El fuego para él es respeto, paciencia y amor a la buena mesa.</p>
+      </div>
+      <div class="bg-smoke border border-smoke/60 rounded-xl p-5 text-left">
+        <div class="text-3xl mb-2">👨‍🔧</div>
+        <h3 class="fileteado text-xl text-ember mb-1">Valentino</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">Sobrino y heredero del fuego. Madruga para elegir los mejores cortes y se queda hasta que el último cliente se va satisfecho. La parrilla del futuro, con raíces del pasado.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+      <div class="bg-smoke rounded-xl p-3">
+        <div class="text-2xl mb-1">🔥</div>
+        <p class="text-ember font-semibold text-xs">Fuego Real</p>
+        <p class="text-gray-500 text-xs mt-0.5">Leña y carbón</p>
+      </div>
+      <div class="bg-smoke rounded-xl p-3">
+        <div class="text-2xl mb-1">🐄</div>
+        <p class="text-ember font-semibold text-xs">Corte Propio</p>
+        <p class="text-gray-500 text-xs mt-0.5">La res entera</p>
+      </div>
+      <div class="bg-smoke rounded-xl p-3">
+        <div class="text-2xl mb-1">🤝</div>
+        <p class="text-ember font-semibold text-xs">San Telmo</p>
+        <p class="text-gray-500 text-xs mt-0.5">Nuestra casa</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section id="ubicacion" class="py-12 px-4 reveal">
+  <div class="max-w-md mx-auto text-center">
+    <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1">Cómo llegás</p>
+    <h2 class="fileteado text-3xl sm:text-4xl text-white mb-5">Encontranos</h2>
+
+    <div class="bg-ash border border-smoke rounded-xl p-6">
+      <div class="text-4xl mb-2">📍</div>
+      <p class="text-white text-lg font-semibold mb-0.5">Chacabuco 454</p>
+      <p class="text-gray-400 text-sm mb-4">San Telmo, Buenos Aires</p>
+      <div class="grid grid-cols-2 gap-3 text-sm mb-5">
         <div class="bg-smoke rounded-xl p-3">
-          <p class="text-ember font-semibold mb-1">🕛 Mediodía</p>
-          <p class="text-gray-400">Lun a Vie: 12:00 – 15:30</p>
+          <p class="text-ember font-semibold text-xs mb-1">🕛 Mediodía</p>
+          <p class="text-gray-400 text-xs">Lun a Vie: 12:00–15:30</p>
         </div>
         <div class="bg-smoke rounded-xl p-3">
-          <p class="text-ember font-semibold mb-1">🌙 Noche</p>
-          <p class="text-gray-400">Vie a Dom: 20:00 – 23:30</p>
+          <p class="text-ember font-semibold text-xs mb-1">🌙 Noche</p>
+          <p class="text-gray-400 text-xs">Vie a Dom: 20:00–23:30</p>
         </div>
       </div>
       <a href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
-         class="inline-flex items-center gap-2 bg-ember hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full transition-all ember-glow">
+         class="inline-flex items-center gap-2 bg-ember hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-full transition-all ember-glow text-sm">
         Abrir en Google Maps
       </a>
     </div>
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer class="bg-charcoal border-t border-smoke py-10 px-4 text-center">
-  <div class="fileteado text-ember text-3xl mb-2">Don Elio</div>
-  <p class="text-gray-600 text-sm mb-4">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
-  <div class="flex justify-center gap-6 text-sm text-gray-600">
+<!-- FOOTER -->
+<footer class="bg-charcoal border-t border-smoke py-8 px-4 text-center">
+  <div class="fileteado text-ember text-2xl mb-1">Don Elio</div>
+  <p class="text-gray-600 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
+  <div class="flex justify-center gap-5 text-xs text-gray-600">
     <a href="#promo" class="hover:text-ember transition-colors">Promo</a>
     <a href="#menu" class="hover:text-ember transition-colors">Carta</a>
     <a href="#nosotros" class="hover:text-ember transition-colors">Nosotros</a>
     <a href="#ubicacion" class="hover:text-ember transition-colors">Ubicación</a>
   </div>
-  <p class="text-gray-700 text-xs mt-6">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
+  <p class="text-gray-700 text-xs mt-4">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
 </footer>
 
-
-<!-- ══════════════════════════════════════════
-     SURPRISE MODAL
-══════════════════════════════════════════ -->
+<!-- SURPRISE MODAL -->
 <div id="surprise-modal"
      class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-  <div class="bg-ash border border-ember/40 rounded-2xl p-8 max-w-sm w-full text-center ember-glow">
-    <div class="text-4xl mb-3">🎰</div>
-    <h3 class="fileteado text-2xl text-white mb-2">Combo Sorpresa</h3>
-    <p class="text-gray-500 text-sm mb-6">Elio elige por vos.</p>
+  <div class="bg-ash border border-ember/40 rounded-2xl p-6 max-w-xs w-full text-center ember-glow">
+    <div class="text-3xl mb-2">🎰</div>
+    <h3 class="fileteado text-xl text-white mb-1">Combo Sorpresa</h3>
+    <p class="text-gray-500 text-xs mb-4">Elio elige por vos.</p>
 
-    <div class="slot-window bg-smoke rounded-xl mb-2 text-ember font-bold text-sm" id="slot-plato">
+    <div class="slot-window bg-smoke rounded-lg mb-1.5 text-ember text-sm" id="slot-plato">
       <div class="slot-reel" id="reel-plato"></div>
     </div>
-    <div class="slot-window bg-smoke rounded-xl mb-6 text-gold font-medium text-sm" id="slot-extra">
+    <div class="slot-window bg-smoke rounded-lg mb-5 text-gold text-sm" id="slot-extra">
       <div class="slot-reel" id="reel-extra"></div>
     </div>
 
-    <div class="flex gap-3">
+    <div class="flex gap-2">
       <button onclick="spinSlot()" id="spin-btn"
-              class="flex-1 bg-ember hover:bg-orange-600 text-white font-semibold py-3 rounded-full transition-all">
+              class="flex-1 bg-ember hover:bg-orange-600 text-white font-semibold py-2.5 rounded-full transition-all text-sm">
         Girar
       </button>
       <a id="surprise-wa" href="#" target="_blank"
-         class="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-3 rounded-full transition-all hidden">
+         class="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-2.5 rounded-full transition-all hidden text-sm">
         Pedir
       </a>
     </div>
-    <button onclick="closeModal()" class="mt-4 text-gray-600 text-sm hover:text-gray-400 transition-colors">
-      Cerrar
-    </button>
+    <button onclick="closeModal()" class="mt-3 text-gray-600 text-xs hover:text-gray-400 transition-colors">Cerrar</button>
   </div>
 </div>
 
-
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
 <script>
-  /* ── Constants ── */
   const WA_NUMBER = '5491161162391';
 
   const PROMOS = [
-    {
-      day: 'Lunes',
-      emoji: '🥩',
-      title: '10% OFF en Sánguche de Cuadril',
-      desc: 'El lunes arranca bien: bajale el 10% al rey de los sánguches. Presentá esta pantalla al llegar.',
-      dish: 'Sánguche de Cuadril (promo lunes -10%)',
-    },
-    {
-      day: 'Martes',
-      emoji: '🍷',
-      title: 'Copa de Vino Gratis con Pastas',
-      desc: 'Pedí las Pastas Caseras y te regalamos una copa de Malbec de la casa. Martes de vino.',
-      dish: 'Pastas Caseras + Copa de Vino gratis (promo martes)',
-    },
-    {
-      day: 'Miércoles',
-      emoji: '🐷',
-      title: 'Combo Bondiola + Gaseosa Precio Especial',
-      desc: 'El miércoles te salvamos el mediodía: Bondiola jugosa + gaseosa a precio combo.',
-      dish: 'Combo Bondiola + Gaseosa (promo miércoles precio especial)',
-    },
-    {
-      day: 'Jueves',
-      emoji: '🍟',
-      title: 'Papas Fritas de Regalo con tu Entraña',
-      desc: 'Pedí la Entraña y te sumamos las papas fritas sin cargo. Jueves de clásico.',
-      dish: 'Entraña + Papas Fritas de regalo (promo jueves)',
-    },
-    {
-      day: 'Viernes',
-      emoji: '🌭',
-      title: '4x3 en Choripanes',
-      desc: 'Viernes de piqueo: pedís 4 choripanes y pagás 3. Ideal para compartir con amigos.',
-      dish: '4x3 en Choripanes (promo viernes)',
-    },
-    {
-      day: 'Sábado',
-      emoji: '🥗',
-      title: 'Dip de Criolla Especial con tu Asado',
-      desc: 'Con cualquier corte de asado, el Dip de Criolla Especial de la casa es de cortesía.',
-      dish: 'Asado Banderita + Dip de Criolla Especial de cortesía (promo sábado)',
-    },
-    {
-      day: 'Domingo',
-      emoji: '🍮',
-      title: 'Postre de Cortesía para Familias',
-      desc: 'Domingo en familia: mesas de 3 o más personas reciben un postre de la casa. Traé a todos.',
-      dish: 'Postre de cortesía para familias (promo domingo)',
-    },
+    { day: 'Lunes',     emoji: '🥩', title: '10% OFF Sandwich de Cuadril',          desc: 'El lunes arranca bien: 10% de descuento en el Sandwich de Cuadril. Mostrá esta pantalla al pedir.',            dish: 'Sandwich de Cuadril con 10% OFF (promo lunes)' },
+    { day: 'Martes',    emoji: '🍷', title: 'Vino Privado con tu corte de parrilla', desc: 'Pedí cualquier corte de parrilla y la copa de Vino Privado va de la casa. Martes de vino.',                    dish: 'Corte de parrilla + Vino Privado de cortesía (promo martes)' },
+    { day: 'Miércoles', emoji: '🐷', title: 'Combo Bondiola + Coca Cola especial',   desc: 'El miércoles te salvamos el mediodía: Bondiola + Coca Cola a precio combo. Aprovechalo.',                      dish: 'Combo Bondiola + Coca Cola precio especial (promo miércoles)' },
+    { day: 'Jueves',    emoji: '🍟', title: 'Papas Fritas gratis con tu Entraña',    desc: 'Pedí la Entraña y las Papas Fritas van de regalo. Jueves de clásico completo.',                                dish: 'Entraña + Papas Fritas de regalo (promo jueves)' },
+    { day: 'Viernes',   emoji: '🌭', title: '3x2 en Choripanes',                     desc: 'Viernes de piqueo: pedís 3 Choripanes y pagás 2. Ideal para compartir.',                                        dish: '3x2 en Choripanes (promo viernes)' },
+    { day: 'Sábado',    emoji: '🥗', title: 'Guarnición gratis con tu Asado',        desc: 'Con cualquier corte de parrilla, elegís una guarnición de la casa sin cargo. Sábado de asado completo.',        dish: 'Corte de parrilla + Guarnición de regalo (promo sábado)' },
+    { day: 'Domingo',   emoji: '🍗', title: 'Pata Muslo de cortesía para familias',  desc: 'Mesas de 3 o más personas reciben una Pata Muslo de cortesía. Domingo en familia en Don Elio.',               dish: 'Pata Muslo de cortesía para mesas familiares (promo domingo)' },
   ];
 
   const COMBOS = [
-    { plato: 'Tira de Asado + Papas Fritas', extra: '+ Chimichurri Casero de regalo' },
-    { plato: 'Entraña + Ensalada Mixta', extra: '+ Copa de Vino Malbec' },
-    { plato: 'Bondiola + Morcilla al Plato', extra: '+ Pan de campo a gusto' },
-    { plato: 'Mollejas a la Parrilla', extra: '+ Provoleta de regalo' },
-    { plato: 'Sánguche de Cuadril XXL', extra: '+ Papas Fritas incluidas' },
-    { plato: '2 Choripanes + Vacío', extra: '+ Salsa criolla especial' },
-    { plato: 'Asado Banderita + Pastas', extra: '+ Postre flan con dulce de leche' },
+    { plato: 'Vacío + Papas Fritas',             extra: '+ Coca Cola incluida' },
+    { plato: 'Entraña + Puré',                   extra: '+ Vino Privado' },
+    { plato: 'Sandwich de Vacío + Ensalada',     extra: '+ Agua incluida' },
+    { plato: 'Chorizo + Sandwich Bondiola',      extra: '+ Cerveza 361' },
+    { plato: 'Asado Banderita + Papas Fritas',   extra: '+ Heineken 500ml' },
+    { plato: 'Cuadril + Ensalada Mixta',         extra: '+ Cerveza Heineken' },
+    { plato: 'Sandwich Milanesa + Puré',         extra: '+ Coca Cola' },
   ];
 
-  /* ── WhatsApp link builder ── */
   function waLink(msg) {
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
-  /* ── Promo del Día ── */
   function loadPromo() {
-    // Argentina time (UTC-3)
     const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-    const day = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
-    const promoIndex = day === 0 ? 6 : day - 1; // map to PROMOS array
-    const p = PROMOS[promoIndex];
-
+    const day = now.getDay();
+    const p = PROMOS[day === 0 ? 6 : day - 1];
     document.getElementById('promo-emoji').textContent = p.emoji;
     document.getElementById('promo-day').textContent = p.day;
     document.getElementById('promo-title').textContent = p.title;
     document.getElementById('promo-desc').textContent = p.desc;
-
-    const msg = `Hola Don Elio! Vengo por la promo de hoy: ${p.dish}. ¿Tienen mesa disponible?`;
-    document.getElementById('promo-wa').href = waLink(msg);
-
-    // Nav reservar WA with today's promo
+    document.getElementById('promo-wa').href = waLink(`Hola Don Elio! Vengo por la promo de hoy: ${p.dish}. ¿Tienen mesa disponible?`);
     document.getElementById('nav-wa').href = waLink(`Hola! Quiero reservar una mesa en Don Elio.`);
   }
 
-  /* ── Live Roast Tracker ── */
   function updateRoastTracker() {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-    const h = now.getHours();
-    const m = now.getMinutes();
-    const mins = h * 60 + m;
-
-    const lunchStart = 12 * 60, lunchEnd = 15 * 60 + 30;
-    const dinnerStart = 20 * 60, dinnerEnd = 23 * 60 + 30;
-
+    const mins = now.getHours() * 60 + now.getMinutes();
     const tracker = document.getElementById('roast-tracker');
     const dot = document.getElementById('roast-dot');
     const text = document.getElementById('roast-text');
-
-    if (mins >= lunchStart && mins <= lunchEnd) {
-      tracker.className = 'mb-8 px-5 py-3 rounded-full border border-ember/60 flex items-center gap-3 text-sm font-medium bg-ember/10';
-      dot.className = 'w-3 h-3 rounded-full inline-block bg-ember animate-pulse';
-      text.textContent = '🔥 Brasas en su punto — Cocina abierta ahora';
-    } else if (mins >= dinnerStart && mins <= dinnerEnd) {
-      tracker.className = 'mb-8 px-5 py-3 rounded-full border border-ember/60 flex items-center gap-3 text-sm font-medium bg-ember/10';
-      dot.className = 'w-3 h-3 rounded-full inline-block bg-ember animate-pulse';
-      text.textContent = '🔥 Brasas encendidas — Servicio de noche activo';
-    } else if (mins > lunchEnd && mins < dinnerStart) {
-      tracker.className = 'mb-8 px-5 py-3 rounded-full border border-yellow-600/40 flex items-center gap-3 text-sm font-medium';
-      dot.className = 'w-3 h-3 rounded-full inline-block bg-yellow-500';
-      text.textContent = '🌡️ Brasas en reposo — Noche: desde las 20:00';
+    if (mins >= 720 && mins <= 930) {
+      tracker.className = 'mb-6 px-4 py-2 rounded-full border border-ember/60 flex items-center gap-2 text-sm font-medium bg-ember/10';
+      dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-ember animate-pulse';
+      text.textContent = '🔥 Brasas en su punto — Cocina abierta';
+    } else if (mins >= 1200 && mins <= 1410) {
+      tracker.className = 'mb-6 px-4 py-2 rounded-full border border-ember/60 flex items-center gap-2 text-sm font-medium bg-ember/10';
+      dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-ember animate-pulse';
+      text.textContent = '🔥 Brasas encendidas — Servicio de noche';
     } else {
-      tracker.className = 'mb-8 px-5 py-3 rounded-full border border-smoke flex items-center gap-3 text-sm font-medium';
-      dot.className = 'w-3 h-3 rounded-full inline-block bg-gray-600';
-      text.textContent = '⏳ Parrilla apagada — Mediodía: desde las 12:00';
+      tracker.className = 'mb-6 px-4 py-2 rounded-full border border-smoke flex items-center gap-2 text-sm font-medium';
+      dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-gray-600';
+      text.textContent = '⏳ Parrilla cerrada — Mediodía 12:00 · Noche 20:00';
     }
   }
 
-  /* ── Scroll Reveal ── */
   function initReveal() {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.12 });
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   }
 
-  /* ── Menu item click → WhatsApp ── */
   function initMenuItems() {
     document.querySelectorAll('.menu-item').forEach(item => {
       item.addEventListener('click', () => {
-        const dish = item.dataset.dish;
-        const price = item.dataset.price;
-        const msg = `Hola Don Elio! Me gustaría pedir: ${dish} (${price}). ¿Tienen lugar ahora?`;
-        window.open(waLink(msg), '_blank');
+        window.open(waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`), '_blank');
       });
     });
   }
 
-  /* ── Slot Machine ── */
-  let slotRunning = false;
-  let finalCombo = null;
+  // Slot machine
+  let slotRunning = false, finalCombo = null;
 
   function buildReel(reelEl, items) {
     reelEl.innerHTML = '';
@@ -601,11 +384,8 @@
   }
 
   function initSlot() {
-    const platos = COMBOS.map(c => c.plato);
-    const extras = COMBOS.map(c => c.extra);
-    buildReel(document.getElementById('reel-plato'), platos);
-    buildReel(document.getElementById('reel-extra'), extras);
-    // Show first item
+    buildReel(document.getElementById('reel-plato'), COMBOS.map(c => c.plato));
+    buildReel(document.getElementById('reel-extra'), COMBOS.map(c => c.extra));
     document.getElementById('reel-plato').style.transform = 'translateY(0)';
     document.getElementById('reel-extra').style.transform = 'translateY(0)';
   }
@@ -613,7 +393,6 @@
   function spinSlot() {
     if (slotRunning) return;
     slotRunning = true;
-
     document.getElementById('surprise-wa').classList.add('hidden');
     const spinBtn = document.getElementById('spin-btn');
     spinBtn.textContent = '...';
@@ -621,39 +400,30 @@
 
     const idx = Math.floor(Math.random() * COMBOS.length);
     finalCombo = COMBOS[idx];
-
     const platoReel = document.getElementById('reel-plato');
     const extraReel = document.getElementById('reel-extra');
-    const itemH = 40; // 2.5rem = 40px
-
-    // Spin animation: rapid cycling then land on target
+    const itemH = 40;
     let ticks = 0;
-    const maxTicks = 18;
+
     const interval = setInterval(() => {
-      const randomOffset = Math.floor(Math.random() * COMBOS.length);
-      platoReel.style.transform = `translateY(-${randomOffset * itemH}px)`;
-      extraReel.style.transform = `translateY(-${(COMBOS.length - 1 - randomOffset) * itemH}px)`;
-      ticks++;
-      if (ticks >= maxTicks) {
+      const r = Math.floor(Math.random() * COMBOS.length);
+      platoReel.style.transform = `translateY(-${r * itemH}px)`;
+      extraReel.style.transform = `translateY(-${(COMBOS.length - 1 - r) * itemH}px)`;
+      if (++ticks >= 18) {
         clearInterval(interval);
-        // Land on chosen index
-        platoReel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        extraReel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        platoReel.style.transition = 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)';
+        extraReel.style.transition = 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)';
         platoReel.style.transform = `translateY(-${idx * itemH}px)`;
         extraReel.style.transform = `translateY(-${idx * itemH}px)`;
-
         setTimeout(() => {
           platoReel.style.transition = '';
           extraReel.style.transition = '';
           slotRunning = false;
           spinBtn.textContent = 'Girar de nuevo';
           spinBtn.disabled = false;
-
-          // Show WhatsApp button
-          const msg = `Hola Don Elio! Elio me sorprendió con el combo: ${finalCombo.plato} ${finalCombo.extra}. ¿Lo tienen disponible?`;
-          const waBtn = document.getElementById('surprise-wa');
-          waBtn.href = waLink(msg);
-          waBtn.classList.remove('hidden');
+          const wa = document.getElementById('surprise-wa');
+          wa.href = waLink(`Hola Don Elio! Elio me sorprendió con: ${finalCombo.plato} ${finalCombo.extra}. ¿Lo tienen?`);
+          wa.classList.remove('hidden');
         }, 500);
       }
     }, 80);
@@ -673,123 +443,78 @@
     document.body.style.overflow = '';
   }
 
-  // Close on backdrop click
-  document.getElementById('surprise-modal').addEventListener('click', function (e) {
-    if (e.target === this) closeModal();
-  });
+  document.getElementById('surprise-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-  /* ── Fire Canvas ── */
+  // Fire canvas
   (function () {
     const canvas = document.getElementById('fire-canvas');
     const ctx = canvas.getContext('2d');
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     resize();
     window.addEventListener('resize', resize);
 
-    // Particle types: ember (small dot) and flame (teardrop)
-    const particles = [];
-
-    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+    function rnd(a, b) { return a + Math.random() * (b - a); }
 
     class Ember {
       constructor() { this.reset(true); }
       reset(init) {
-        this.x = randomBetween(0, canvas.width);
-        this.y = init ? randomBetween(0, canvas.height) : canvas.height + 10;
-        this.size = randomBetween(1, 3.5);
-        this.speedY = randomBetween(0.4, 1.4);
-        this.speedX = randomBetween(-0.4, 0.4);
-        this.drift = randomBetween(-0.015, 0.015);
+        this.x = rnd(0, canvas.width);
+        this.y = init ? rnd(0, canvas.height) : canvas.height + 8;
+        this.size = rnd(1, 3.2);
+        this.vy = rnd(0.4, 1.3);
+        this.vx = rnd(-0.35, 0.35);
+        this.drift = rnd(-0.012, 0.012);
         this.life = 1;
-        this.decay = randomBetween(0.003, 0.008);
-        // Color: white-hot → orange → red
+        this.decay = rnd(0.003, 0.008);
         const t = Math.random();
-        if (t < 0.15) this.color = '#fff8e7';
-        else if (t < 0.4) this.color = '#FFD580';
-        else if (t < 0.7) this.color = '#FF8C00';
-        else this.color = '#FF4D00';
+        this.color = t < 0.15 ? '#fff8e7' : t < 0.4 ? '#FFD580' : t < 0.7 ? '#FF8C00' : '#FF4D00';
       }
       update() {
-        this.y -= this.speedY;
-        this.x += this.speedX;
-        this.speedX += this.drift;
-        this.life -= this.decay;
-        if (this.life <= 0 || this.y < -10) this.reset(false);
+        this.y -= this.vy; this.x += this.vx; this.vx += this.drift; this.life -= this.decay;
+        if (this.life <= 0 || this.y < -8) this.reset(false);
       }
       draw() {
-        ctx.save();
-        ctx.globalAlpha = this.life * 0.85;
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = this.size * 4;
-        ctx.shadowColor = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        ctx.save(); ctx.globalAlpha = this.life * 0.8;
+        ctx.fillStyle = this.color; ctx.shadowBlur = this.size * 4; ctx.shadowColor = this.color;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
       }
     }
 
     class Flame {
       constructor() { this.reset(true); }
       reset(init) {
-        this.x = randomBetween(0, canvas.width);
-        this.y = init ? randomBetween(canvas.height * 0.5, canvas.height) : canvas.height + 20;
-        this.width = randomBetween(8, 28);
-        this.height = randomBetween(20, 70);
-        this.speedY = randomBetween(0.6, 1.8);
-        this.speedX = randomBetween(-0.3, 0.3);
-        this.life = randomBetween(0.4, 1);
-        this.decay = randomBetween(0.004, 0.010);
-        this.wobble = randomBetween(0, Math.PI * 2);
-        this.wobbleSpeed = randomBetween(0.03, 0.08);
+        this.x = rnd(0, canvas.width);
+        this.y = init ? rnd(canvas.height * 0.4, canvas.height) : canvas.height + 20;
+        this.w = rnd(8, 26); this.h = rnd(18, 65);
+        this.vy = rnd(0.6, 1.7); this.vx = rnd(-0.25, 0.25);
+        this.life = rnd(0.4, 1); this.decay = rnd(0.004, 0.010);
+        this.wob = rnd(0, Math.PI * 2); this.wobSpeed = rnd(0.03, 0.08);
       }
       update() {
-        this.y -= this.speedY;
-        this.x += this.speedX + Math.sin(this.wobble) * 0.5;
-        this.wobble += this.wobbleSpeed;
-        this.life -= this.decay;
-        this.height *= 0.998;
-        if (this.life <= 0 || this.y + this.height < -10) this.reset(false);
+        this.y -= this.vy; this.x += this.vx + Math.sin(this.wob) * 0.45;
+        this.wob += this.wobSpeed; this.life -= this.decay; this.h *= 0.999;
+        if (this.life <= 0 || this.y + this.h < -10) this.reset(false);
       }
       draw() {
-        const alpha = Math.min(this.life * 0.55, 0.45);
-        const grad = ctx.createRadialGradient(
-          this.x, this.y, 0,
-          this.x, this.y - this.height * 0.5, this.height
-        );
-        grad.addColorStop(0,   `rgba(255,255,180,${alpha})`);
-        grad.addColorStop(0.2, `rgba(255,160,20,${alpha * 0.9})`);
-        grad.addColorStop(0.5, `rgba(255,60,0,${alpha * 0.7})`);
-        grad.addColorStop(1,   `rgba(100,10,0,0)`);
-
-        ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
+        const a = Math.min(this.life * 0.5, 0.42);
+        const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y - this.h * 0.5, this.h);
+        g.addColorStop(0, `rgba(255,255,180,${a})`);
+        g.addColorStop(0.25, `rgba(255,140,10,${a * 0.85})`);
+        g.addColorStop(0.6, `rgba(255,50,0,${a * 0.6})`);
+        g.addColorStop(1, `rgba(80,5,0,0)`);
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
         ctx.beginPath();
-        // teardrop shape
         ctx.moveTo(this.x, this.y);
-        ctx.bezierCurveTo(
-          this.x + this.width, this.y - this.height * 0.3,
-          this.x + this.width * 0.5, this.y - this.height,
-          this.x, this.y - this.height
-        );
-        ctx.bezierCurveTo(
-          this.x - this.width * 0.5, this.y - this.height,
-          this.x - this.width, this.y - this.height * 0.3,
-          this.x, this.y
-        );
-        ctx.fillStyle = grad;
-        ctx.fill();
-        ctx.restore();
+        ctx.bezierCurveTo(this.x + this.w, this.y - this.h * 0.3, this.x + this.w * 0.5, this.y - this.h, this.x, this.y - this.h);
+        ctx.bezierCurveTo(this.x - this.w * 0.5, this.y - this.h, this.x - this.w, this.y - this.h * 0.3, this.x, this.y);
+        ctx.fillStyle = g; ctx.fill(); ctx.restore();
       }
     }
 
-    // Spawn particles
-    for (let i = 0; i < 90; i++) particles.push(new Ember());
-    for (let i = 0; i < 35; i++) particles.push(new Flame());
+    const particles = [
+      ...Array.from({ length: 90 }, () => new Ember()),
+      ...Array.from({ length: 35 }, () => new Flame()),
+    ];
 
     function loop() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -799,7 +524,6 @@
     loop();
   })();
 
-  /* ── Init ── */
   document.addEventListener('DOMContentLoaded', () => {
     loadPromo();
     updateRoastTracker();
