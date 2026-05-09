@@ -350,14 +350,17 @@
     const tracker = document.getElementById('roast-tracker');
     const dot = document.getElementById('roast-dot');
     const text = document.getElementById('roast-text');
-    if (mins >= 750 && mins <= 960) {
+    const day = now.getDay(); // 0=dom, 1=lun ... 5=vie, 6=sab
+    const isWeekday = day >= 1 && day <= 5;
+    const isOpen = isWeekday && mins >= 750 && mins <= 960;
+    if (isOpen) {
       tracker.className = 'mb-6 px-4 py-2 rounded-full border border-ember/60 flex items-center gap-2 text-sm font-medium bg-ember/10';
       dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-ember animate-pulse';
-      text.textContent = '🔥 Brasas en su punto — Cocina abierta';
+      text.textContent = '🔥 Parrilla abierta — Hasta las 16:00 hs';
     } else {
       tracker.className = 'mb-6 px-4 py-2 rounded-full border border-smoke flex items-center gap-2 text-sm font-medium';
       dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-gray-600';
-      text.textContent = '⏳ Parrilla cerrada — Abrimos 12:30 hs';
+      text.textContent = isWeekday ? '⏳ Parrilla cerrada — Abrimos a las 12:30 hs' : '⏳ Parrilla cerrada — Abrimos el lunes';
     }
   }
 
