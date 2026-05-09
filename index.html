@@ -242,14 +242,14 @@
       <div class="text-4xl mb-2">📍</div>
       <p class="text-white text-lg font-semibold mb-0.5">Chacabuco 454</p>
       <p class="text-gray-100 text-sm mb-4">San Telmo, Buenos Aires</p>
-      <div class="grid grid-cols-2 gap-3 text-sm mb-5">
+      <div class="flex flex-col gap-3 text-sm mb-5">
         <div class="bg-smoke rounded-xl p-3">
-          <p class="text-ember font-semibold text-xs mb-1">🕛 Mediodía</p>
-          <p class="text-gray-100 text-xs">Lun a Vie: 12:00–15:30</p>
+          <p class="text-ember font-semibold text-xs mb-1">🕛 Horario</p>
+          <p class="text-gray-100 text-xs">Lunes a Viernes: 12:30–16:00</p>
         </div>
         <div class="bg-smoke rounded-xl p-3">
-          <p class="text-ember font-semibold text-xs mb-1">🌙 Noche</p>
-          <p class="text-gray-100 text-xs">Vie a Dom: 20:00–23:30</p>
+          <p class="text-ember font-semibold text-xs mb-1">🎉 Eventos</p>
+          <p class="text-gray-100 text-xs">Reservas para eventos y grupos — consultanos por WhatsApp</p>
         </div>
       </div>
       <a href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
@@ -350,18 +350,14 @@
     const tracker = document.getElementById('roast-tracker');
     const dot = document.getElementById('roast-dot');
     const text = document.getElementById('roast-text');
-    if (mins >= 720 && mins <= 930) {
+    if (mins >= 750 && mins <= 960) {
       tracker.className = 'mb-6 px-4 py-2 rounded-full border border-ember/60 flex items-center gap-2 text-sm font-medium bg-ember/10';
       dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-ember animate-pulse';
       text.textContent = '🔥 Brasas en su punto — Cocina abierta';
-    } else if (mins >= 1200 && mins <= 1410) {
-      tracker.className = 'mb-6 px-4 py-2 rounded-full border border-ember/60 flex items-center gap-2 text-sm font-medium bg-ember/10';
-      dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-ember animate-pulse';
-      text.textContent = '🔥 Brasas encendidas — Servicio de noche';
     } else {
       tracker.className = 'mb-6 px-4 py-2 rounded-full border border-smoke flex items-center gap-2 text-sm font-medium';
       dot.className = 'w-2.5 h-2.5 rounded-full inline-block bg-gray-600';
-      text.textContent = '⏳ Parrilla cerrada — Mediodía 12:00 · Noche 20:00';
+      text.textContent = '⏳ Parrilla cerrada — Abrimos 12:30 hs';
     }
   }
 
