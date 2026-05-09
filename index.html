@@ -31,9 +31,12 @@
 
   <style>
     html { scroll-behavior: smooth; }
-    body { background-color: #0D0D0D; color: #E5E5E5; font-family: 'Inter', sans-serif; }
+    body { background-color: #0D0D0D; color: #F0F0F0; font-family: 'Inter', sans-serif; font-size: 15px; }
+    .bg-ash  { background-color: rgba(22, 22, 22, 0.92) !important; }
+    .bg-smoke { background-color: rgba(36, 36, 36, 0.95) !important; }
 
-    .fileteado { font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em; line-height: 1.05; }
+    .fileteado { font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em; line-height: 1.05; text-shadow: 0 2px 12px rgba(0,0,0,0.9); }
+    p, li, span, a { text-shadow: 0 1px 6px rgba(0,0,0,0.8); }
 
     .ember-glow { transition: box-shadow 0.25s; }
     .ember-glow:hover { box-shadow: 0 0 18px rgba(255,77,0,0.4); }
@@ -69,7 +72,7 @@
 <nav class="fixed top-0 w-full z-50 bg-charcoal/90 backdrop-blur border-b border-smoke">
   <div class="max-w-4xl mx-auto px-4 h-13 flex items-center justify-between">
     <span class="fileteado text-ember text-xl">Don Elio</span>
-    <div class="hidden sm:flex gap-5 text-sm text-gray-400">
+    <div class="hidden sm:flex gap-5 text-sm text-gray-100">
       <a href="#promo" class="hover:text-ember transition-colors">Promo</a>
       <a href="#menu" class="hover:text-ember transition-colors">Carta</a>
       <a href="#nosotros" class="hover:text-ember transition-colors">Nosotros</a>
@@ -87,9 +90,9 @@
   <div class="text-5xl mb-3 animate-flicker select-none">🔥</div>
   <h1 class="fileteado text-5xl sm:text-7xl text-white mb-2">Don Elio</h1>
   <p class="text-ember font-semibold text-base sm:text-lg tracking-widest uppercase mb-2">Parrilla · San Telmo</p>
-  <p class="text-gray-400 max-w-xs sm:max-w-sm text-sm sm:text-base leading-relaxed mb-6">
+  <p class="text-gray-100 max-w-xs sm:max-w-sm text-sm sm:text-base leading-relaxed mb-6">
     Brasas auténticas, sabor porteño de ley.<br/>
-    <span class="text-gray-500 text-xs">Chacabuco 454, San Telmo — Buenos Aires</span>
+    <span class="text-gray-200 text-xs">Chacabuco 454, San Telmo — Buenos Aires</span>
   </p>
 
   <div id="roast-tracker" class="mb-6 px-4 py-2 rounded-full border flex items-center gap-2 text-sm font-medium transition-all duration-500">
@@ -118,7 +121,7 @@
       <div class="text-4xl mb-3" id="promo-emoji">🥩</div>
       <div class="text-ember text-xs font-bold tracking-widest uppercase mb-1" id="promo-day">—</div>
       <h3 class="fileteado text-2xl text-white mb-2" id="promo-title">Cargando...</h3>
-      <p class="text-gray-400 text-sm" id="promo-desc"></p>
+      <p class="text-gray-100 text-sm" id="promo-desc"></p>
       <div class="mt-5">
         <a id="promo-wa" href="#" target="_blank"
            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-2.5 rounded-full transition-all ember-glow text-sm">
@@ -142,14 +145,14 @@
       <div class="bg-ash border border-smoke rounded-xl p-5">
         <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🥩 Parrilla</h3>
         <ul class="space-y-2 text-sm">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vacío" data-price="$16.000"><span>Vacío</span><span class="text-gray-500">$16.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Entraña" data-price="$18.000"><span>Entraña</span><span class="text-gray-500">$18.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cuadril" data-price="$14.000"><span>Cuadril</span><span class="text-gray-500">$14.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Asado Banderita" data-price="$14.000"><span>Asado Banderita</span><span class="text-gray-500">$14.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Milanesa de Ternera" data-price="$10.000"><span>Milanesa de Ternera</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Bondiola" data-price="$10.000"><span>Bondiola</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Chorizo" data-price="$5.000"><span>Chorizo</span><span class="text-gray-500">$5.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Pata Muslo" data-price="$10.000"><span>Pata Muslo</span><span class="text-gray-500">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vacío" data-price="$16.000"><span>Vacío</span><span class="text-gray-200">$16.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Entraña" data-price="$18.000"><span>Entraña</span><span class="text-gray-200">$18.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cuadril" data-price="$14.000"><span>Cuadril</span><span class="text-gray-200">$14.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Asado Banderita" data-price="$14.000"><span>Asado Banderita</span><span class="text-gray-200">$14.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Milanesa de Ternera" data-price="$10.000"><span>Milanesa de Ternera</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Bondiola" data-price="$10.000"><span>Bondiola</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Chorizo" data-price="$5.000"><span>Chorizo</span><span class="text-gray-200">$5.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Pata Muslo" data-price="$10.000"><span>Pata Muslo</span><span class="text-gray-200">$10.000</span></li>
         </ul>
       </div>
 
@@ -157,12 +160,12 @@
       <div class="bg-ash border border-smoke rounded-xl p-5">
         <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🌭 Sándwiches</h3>
         <ul class="space-y-2 text-sm">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Vacío" data-price="$12.000"><span>Sandwich de Vacío</span><span class="text-gray-500">$12.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Cuadril" data-price="$10.000"><span>Sandwich de Cuadril</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa" data-price="$10.000"><span>Sandwich de Milanesa</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa de Pollo" data-price="$10.000"><span>Sandwich Milanesa Pollo</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Bondiola" data-price="$10.000"><span>Sandwich de Bondiola</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Choripán" data-price="$6.000"><span>Choripán</span><span class="text-gray-500">$6.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Vacío" data-price="$12.000"><span>Sandwich de Vacío</span><span class="text-gray-200">$12.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Cuadril" data-price="$10.000"><span>Sandwich de Cuadril</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa" data-price="$10.000"><span>Sandwich de Milanesa</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Milanesa de Pollo" data-price="$10.000"><span>Sandwich Milanesa Pollo</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Sandwich de Bondiola" data-price="$10.000"><span>Sandwich de Bondiola</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Choripán" data-price="$6.000"><span>Choripán</span><span class="text-gray-200">$6.000</span></li>
         </ul>
       </div>
 
@@ -170,9 +173,9 @@
       <div class="bg-ash border border-smoke rounded-xl p-5">
         <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🍟 Guarniciones</h3>
         <ul class="space-y-2 text-sm">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Papas Fritas" data-price="$3.500"><span>Papas Fritas</span><span class="text-gray-500">$3.500</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Puré" data-price="$3.500"><span>Puré</span><span class="text-gray-500">$3.500</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Ensalada Mixta" data-price="$3.500"><span>Ensalada Mixta</span><span class="text-gray-500">$3.500</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Papas Fritas" data-price="$3.500"><span>Papas Fritas</span><span class="text-gray-200">$3.500</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Puré" data-price="$3.500"><span>Puré</span><span class="text-gray-200">$3.500</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Ensalada Mixta" data-price="$3.500"><span>Ensalada Mixta</span><span class="text-gray-200">$3.500</span></li>
         </ul>
       </div>
 
@@ -180,18 +183,18 @@
       <div class="bg-ash border border-smoke rounded-xl p-5">
         <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">🍷 Bebidas</h3>
         <ul class="space-y-2 text-sm">
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Coca Cola" data-price="$4.000"><span>Coca Cola</span><span class="text-gray-500">$4.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Agua 500ml" data-price="$3.000"><span>Agua 500ml</span><span class="text-gray-500">$3.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza 361 500ml" data-price="$4.000"><span>Cerveza 361 500ml</span><span class="text-gray-500">$4.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza Heineken 500ml" data-price="$5.000"><span>Heineken 500ml</span><span class="text-gray-500">$5.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cordero con Piel de Lobo" data-price="$10.000"><span>Cordero con Piel de Lobo</span><span class="text-gray-500">$10.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Privado" data-price="$12.000"><span>Vino Privado</span><span class="text-gray-500">$12.000</span></li>
-          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Trampeter" data-price="$16.000"><span>Vino Trampeter</span><span class="text-gray-500">$16.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Coca Cola" data-price="$4.000"><span>Coca Cola</span><span class="text-gray-200">$4.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Agua 500ml" data-price="$3.000"><span>Agua 500ml</span><span class="text-gray-200">$3.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza 361 500ml" data-price="$4.000"><span>Cerveza 361 500ml</span><span class="text-gray-200">$4.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cerveza Heineken 500ml" data-price="$5.000"><span>Heineken 500ml</span><span class="text-gray-200">$5.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Cordero con Piel de Lobo" data-price="$10.000"><span>Cordero con Piel de Lobo</span><span class="text-gray-200">$10.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Privado" data-price="$12.000"><span>Vino Privado</span><span class="text-gray-200">$12.000</span></li>
+          <li class="menu-item flex justify-between cursor-pointer hover:text-ember transition-colors" data-dish="Vino Trampeter" data-price="$16.000"><span>Vino Trampeter</span><span class="text-gray-200">$16.000</span></li>
         </ul>
       </div>
 
     </div>
-    <p class="text-center text-gray-600 text-xs mt-4">Tocá cualquier plato para pedirlo por WhatsApp</p>
+    <p class="text-center text-gray-300 text-xs mt-4">Tocá cualquier plato para pedirlo por WhatsApp</p>
   </div>
 </section>
 
@@ -205,7 +208,7 @@
       <div class="bg-smoke border border-smoke/60 rounded-xl p-5 text-left">
         <div class="text-3xl mb-2">👨‍🍳</div>
         <h3 class="fileteado text-xl text-ember mb-1">Eduardo</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">Fundador y alma de Don Elio. Con más de 30 años encendiendo brasas, convirtió la parrilla en una institución de San Telmo. El fuego para él es respeto, paciencia y amor a la buena mesa.</p>
+        <p class="text-gray-100 text-sm leading-relaxed">Fundador y alma de Don Elio. Con más de 30 años encendiendo brasas, convirtió la parrilla en una institución de San Telmo. El fuego para él es respeto, paciencia y amor a la buena mesa.</p>
       </div>
     </div>
 
@@ -213,17 +216,17 @@
       <div class="bg-smoke rounded-xl p-3">
         <div class="text-2xl mb-1">🔥</div>
         <p class="text-ember font-semibold text-xs">Fuego Real</p>
-        <p class="text-gray-500 text-xs mt-0.5">Leña y carbón</p>
+        <p class="text-gray-200 text-xs mt-0.5">Leña y carbón</p>
       </div>
       <div class="bg-smoke rounded-xl p-3">
         <div class="text-2xl mb-1">🐄</div>
         <p class="text-ember font-semibold text-xs">Corte Propio</p>
-        <p class="text-gray-500 text-xs mt-0.5">La res entera</p>
+        <p class="text-gray-200 text-xs mt-0.5">La res entera</p>
       </div>
       <div class="bg-smoke rounded-xl p-3">
         <div class="text-2xl mb-1">🤝</div>
         <p class="text-ember font-semibold text-xs">San Telmo</p>
-        <p class="text-gray-500 text-xs mt-0.5">Nuestra casa</p>
+        <p class="text-gray-200 text-xs mt-0.5">Nuestra casa</p>
       </div>
     </div>
   </div>
@@ -238,15 +241,15 @@
     <div class="bg-ash border border-smoke rounded-xl p-6">
       <div class="text-4xl mb-2">📍</div>
       <p class="text-white text-lg font-semibold mb-0.5">Chacabuco 454</p>
-      <p class="text-gray-400 text-sm mb-4">San Telmo, Buenos Aires</p>
+      <p class="text-gray-100 text-sm mb-4">San Telmo, Buenos Aires</p>
       <div class="grid grid-cols-2 gap-3 text-sm mb-5">
         <div class="bg-smoke rounded-xl p-3">
           <p class="text-ember font-semibold text-xs mb-1">🕛 Mediodía</p>
-          <p class="text-gray-400 text-xs">Lun a Vie: 12:00–15:30</p>
+          <p class="text-gray-100 text-xs">Lun a Vie: 12:00–15:30</p>
         </div>
         <div class="bg-smoke rounded-xl p-3">
           <p class="text-ember font-semibold text-xs mb-1">🌙 Noche</p>
-          <p class="text-gray-400 text-xs">Vie a Dom: 20:00–23:30</p>
+          <p class="text-gray-100 text-xs">Vie a Dom: 20:00–23:30</p>
         </div>
       </div>
       <a href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
@@ -260,14 +263,14 @@
 <!-- FOOTER -->
 <footer class="border-t border-smoke py-8 px-4 text-center">
   <div class="fileteado text-ember text-2xl mb-1">Don Elio</div>
-  <p class="text-gray-600 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
-  <div class="flex justify-center gap-5 text-xs text-gray-600">
+  <p class="text-gray-300 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
+  <div class="flex justify-center gap-5 text-xs text-gray-300">
     <a href="#promo" class="hover:text-ember transition-colors">Promo</a>
     <a href="#menu" class="hover:text-ember transition-colors">Carta</a>
     <a href="#nosotros" class="hover:text-ember transition-colors">Nosotros</a>
     <a href="#ubicacion" class="hover:text-ember transition-colors">Ubicación</a>
   </div>
-  <p class="text-gray-700 text-xs mt-4">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
+  <p class="text-gray-400 text-xs mt-4">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
 </footer>
 
 <!-- SURPRISE MODAL -->
@@ -276,7 +279,7 @@
   <div class="bg-ash border border-ember/40 rounded-2xl p-6 max-w-xs w-full text-center ember-glow">
     <div class="text-3xl mb-2">🎰</div>
     <h3 class="fileteado text-xl text-white mb-1">Combo Sorpresa</h3>
-    <p class="text-gray-500 text-xs mb-4">Elio elige por vos.</p>
+    <p class="text-gray-200 text-xs mb-4">Elio elige por vos.</p>
 
     <div class="bg-smoke rounded-xl py-6 mb-5 min-h-[6rem] flex flex-col items-center justify-center">
       <div id="slot-placeholder" class="text-5xl transition-all duration-75">🥩</div>
@@ -296,7 +299,7 @@
         Pedir
       </a>
     </div>
-    <button onclick="closeModal()" class="mt-3 text-gray-600 text-xs hover:text-gray-400 transition-colors">Cerrar</button>
+    <button onclick="closeModal()" class="mt-3 text-gray-300 text-xs hover:text-gray-100 transition-colors">Cerrar</button>
   </div>
 </div>
 
