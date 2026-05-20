@@ -2,7 +2,7 @@ import qrcode
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-URL    = "https://donelio-santelmo.github.io/"
+URL    = "https://donelio-santelmo.github.io/carta.html"
 EMBER  = (255, 77, 0)
 DARK   = (13, 13, 13)
 WHITE  = (240, 240, 240)
@@ -47,7 +47,7 @@ except OSError:
 
 title = "Don Elio"
 sub   = "Parrilla · San Telmo"
-footer_text = "Escaneá para ver la carta"
+footer_text = "Escaneá · Ver la carta completa"
 
 def centered_x(text, font):
     bbox = draw.textbbox((0, 0), text, font=font)
