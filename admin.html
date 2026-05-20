@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Don Elio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0D0D0D;
+      color: #F0F0F0;
+      font-family: -apple-system, 'Inter', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+
+    /* LOGIN */
+    #login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      gap: 1rem;
+    }
+    #login-screen .logo { font-size: 2.5rem; font-style: italic; color: #FF4D00; font-weight: 700; }
+    #login-screen .sub  { color: #aaa; font-size: 0.85rem; margin-top: -0.5rem; }
+    #login-screen input {
+      width: 100%;
+      max-width: 280px;
+      background: #1A1A1A;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      font-size: 1.1rem;
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.2em;
+      outline: none;
+    }
+    #login-screen input:focus { border-color: #FF4D00; }
+    #login-btn {
+      width: 100%;
+      max-width: 280px;
+      background: #FF4D00;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.85rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #login-btn:active { background: #cc3d00; }
+    #login-error { color: #f87171; font-size: 0.85rem; display: none; }
+
+    /* PANEL */
+    #admin-panel { display: none; padding-bottom: 6rem; }
+
+    .panel-header {
+      background: #1A1A1A;
+      border-bottom: 2px solid #FF4D00;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .panel-header .logo { font-size: 1.5rem; font-style: italic; color: #FF4D00; font-weight: 700; }
+    .panel-header .sub  { color: #aaa; font-size: 0.8rem; margin-top: 0.25rem; }
+
+    .section-card {
+      margin: 1rem;
+      background: #1A1A1A;
+      border: 1px solid #2A2A2A;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .section-title {
+      background: #2A2A2A;
+      padding: 0.75rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FF4D00;
+    }
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #242424;
+      gap: 1rem;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-name {
+      flex: 1;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+      line-height: 1.3;
+    }
+    .item-nota { font-size: 0.72rem; color: #888; display: block; }
+    .precio-input {
+      width: 110px;
+      background: #0D0D0D;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 0.5rem 0.65rem;
+      font-size: 0.9rem;
+      color: #fff;
+      text-align: right;
+      outline: none;
+      flex-shrink: 0;
+    }
+    .precio-input:focus { border-color: #FF4D00; }
+    .precio-input.is-consultar { color: #FF4D00; font-style: italic; }
+
+    .hint {
+      margin: 0 1rem;
+      padding: 0.6rem 0.8rem;
+      background: #161616;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    /* SAVE BUTTON */
+    .save-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #0D0D0D;
+      border-top: 1px solid #2A2A2A;
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    #save-btn {
+      width: 100%;
+      max-width: 400px;
+      background: #FF4D00;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.9rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #save-btn:disabled { background: #555; cursor: not-allowed; }
+    #save-btn:active:not(:disabled) { background: #cc3d00; }
+    #status-msg { font-size: 0.8rem; min-height: 1.2rem; text-align: center; }
+    .ok  { color: #4ade80; }
+    .err { color: #f87171; }
+
+    /* SETUP */
+    #setup-section {
+      margin: 1rem;
+      background: #1a1208;
+      border: 1px solid #5a3a00;
+      border-radius: 14px;
+      padding: 1rem;
+    }
+    #setup-section h3 { color: #D4A017; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    #setup-section p  { color: #aaa; font-size: 0.78rem; line-height: 1.5; margin-bottom: 0.75rem; }
+    #token-input {
+      width: 100%;
+      background: #0D0D0D;
+      border: 1px solid #5a3a00;
+      border-radius: 8px;
+      padding: 0.65rem 0.8rem;
+      font-size: 0.82rem;
+      color: #fff;
+      outline: none;
+      margin-bottom: 0.6rem;
+    }
+    #token-input:focus { border-color: #D4A017; }
+    #save-token-btn {
+      background: #D4A017;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="logo">Don Elio</div>
+  <div class="sub">Admin de la carta</div>
+  <input type="password" id="pwd-input" placeholder="Contraseña"
+         onkeydown="if(event.key==='Enter') login()" />
+  <button id="login-btn" onclick="login()">Entrar</button>
+  <p id="login-error">Contraseña incorrecta</p>
+</div>
+
+<!-- PANEL -->
+<div id="admin-panel">
+
+  <div class="panel-header">
+    <div class="logo">Don Elio</div>
+    <div class="sub">Cambiá los precios y tocá Guardar</div>
+  </div>
+
+  <div class="hint" style="margin-top:1rem">
+    💡 Escribí el número sin puntos (ej: <strong>9000</strong>). Si no tiene precio fijo, escribí <strong>consultar</strong>.
+  </div>
+
+  <div id="sections"></div>
+
+  <!-- Setup token (solo primera vez) -->
+  <div id="setup-section">
+    <h3>⚙️ Configuración inicial</h3>
+    <p>Pedro: ingresá el token de GitHub una sola vez. Después Don Elio solo necesita la contraseña.</p>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+    <button id="save-token-btn" onclick="saveToken()">Guardar token</button>
+  </div>
+
+  <div style="height:5rem"></div>
+
+  <div class="save-bar">
+    <button id="save-btn" onclick="guardar()">💾 Guardar cambios</button>
+    <div id="status-msg"></div>
+  </div>
+
+</div>
+
+<script>
+  const PASSWORD  = 'elio2024';
+  const REPO      = 'donelio-santelmo/donelio-santelmo.github.io';
+  const FILE      = 'data.json';
+  const API_BASE  = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
+
+  let menuData = null;
+
+  /* ── LOGIN ── */
+  function login() {
+    const pwd = document.getElementById('pwd-input').value;
+    if (pwd === PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display  = 'block';
+      loadData();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  /* ── LOAD DATA.JSON ── */
+  async function loadData() {
+    try {
+      const res  = await fetch('data.json?v=' + Date.now());
+      menuData   = await res.json();
+      renderSections(menuData);
+    } catch (e) {
+      setStatus('No se pudo cargar la carta. Revisá la conexión.', 'err');
+    }
+  }
+
+  /* ── RENDER FORM ── */
+  const SECTION_ORDER = ['parrilla','mas','acompanamiento','postres','bebidas','vinos','aperitivos'];
+
+  function renderSections(d) {
+    const container = document.getElementById('sections');
+    container.innerHTML = SECTION_ORDER.map(key => {
+      const sec = d[key];
+      const rows = sec.items.map((item, idx) => {
+        const isConsultar = item.precio === 'consultar';
+        const displayVal  = isConsultar ? 'consultar' : item.precio;
+        const notaHTML    = item.nota ? `<span class="item-nota">${item.nota}</span>` : '';
+        return `
+          <div class="item-row">
+            <div class="item-name">${item.plato}${notaHTML}</div>
+            <input class="precio-input ${isConsultar ? 'is-consultar' : ''}"
+                   type="text" inputmode="decimal"
+                   data-section="${key}" data-idx="${idx}"
+                   value="${displayVal}"
+                   oninput="onPrecioInput(this)" />
+          </div>`;
+      }).join('');
+      return `
+        <div class="section-card">
+          <div class="section-title">${sec.label}</div>
+          ${rows}
+        </div>`;
+    }).join('');
+
+    const token = localStorage.getItem('gh_token');
+    if (token) document.getElementById('setup-section').style.display = 'none';
+  }
+
+  function onPrecioInput(input) {
+    const v = input.value.trim().toLowerCase();
+    input.classList.toggle('is-consultar', v === 'consultar');
+  }
+
+  /* ── GUARDAR ── */
+  async function guardar() {
+    const token = localStorage.getItem('gh_token');
+    if (!token) {
+      setStatus('Primero guardá el token de GitHub (abajo ↓)', 'err');
+      return;
+    }
+
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    setStatus('Guardando...', '');
+
+    // Collect values from form
+    const newData = JSON.parse(JSON.stringify(menuData));
+    document.querySelectorAll('.precio-input').forEach(input => {
+      const { section, idx } = input.dataset;
+      newData[section].items[idx].precio = input.value.trim().toLowerCase();
+    });
+
+    try {
+      // Get current SHA
+      const meta = await fetch(API_BASE, {
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' }
+      });
+      if (!meta.ok) throw new Error('No se pudo conectar con GitHub. Revisá el token.');
+      const { sha } = await meta.json();
+
+      // Encode and push
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+      const push = await fetch(API_BASE, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Actualizar precios de la carta',
+          content,
+          sha,
+        }),
+      });
+
+      if (!push.ok) throw new Error('Error al guardar. Intentá de nuevo.');
+
+      menuData = newData;
+      setStatus('✅ ¡Cambios guardados! La carta se actualiza en 2 minutos.', 'ok');
+    } catch (e) {
+      setStatus('❌ ' + e.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function setStatus(msg, cls) {
+    const el = document.getElementById('status-msg');
+    el.textContent = msg;
+    el.className   = cls;
+  }
+
+  /* ── TOKEN SETUP ── */
+  function saveToken() {
+    const t = document.getElementById('token-input').value.trim();
+    if (!t) return;
+    localStorage.setItem('gh_token', t);
+    document.getElementById('setup-section').style.display = 'none';
+    setStatus('Token guardado ✓', 'ok');
+  }
+</script>
+</body>
+</html>

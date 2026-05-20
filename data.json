@@ -1,0 +1,85 @@
+{
+  "parrilla": {
+    "label": "🥩 Parrilla",
+    "nota": "Todos incluyen guarnición · plato o sándwich",
+    "items": [
+      { "plato": "Chorizo",          "precio": "9000"     },
+      { "plato": "Pechuga",          "precio": "11000"    },
+      { "plato": "Bondiola",         "precio": "11000"    },
+      { "plato": "Cuadril",          "precio": "15000"    },
+      { "plato": "Asado Banderita",  "precio": "15000"    },
+      { "plato": "Vacío",            "precio": "17000"    },
+      { "plato": "Parrillada",       "precio": "35000"    },
+      { "plato": "Provoleta",        "precio": "consultar"}
+    ]
+  },
+  "mas": {
+    "label": "🍽️ Más...",
+    "items": [
+      { "plato": "Milanesa",              "precio": "13000",    "nota": "" },
+      { "plato": "Sopa Crema Casera",     "precio": "5000",     "nota": "Zapallo, arvejas o zanahoria curry" },
+      { "plato": "Rabas",                 "precio": "consultar","nota": "" },
+      { "plato": "Pastel de Carne",       "precio": "consultar","nota": "" },
+      { "plato": "Guiso de Lentejas",     "precio": "consultar","nota": "" },
+      { "plato": "Tallarines / Ravioles", "precio": "consultar","nota": "Filetto, crema o manteca de hierbas" }
+    ]
+  },
+  "acompanamiento": {
+    "label": "🍟 Para Acompañar",
+    "items": [
+      { "plato": "Ensalada",                   "precio": "3500"     },
+      { "plato": "Papas Fritas",               "precio": "4000"     },
+      { "plato": "Puré / Papas al Romero",     "precio": "4000"     },
+      { "plato": "Provoleta",                  "precio": "consultar"}
+    ]
+  },
+  "postres": {
+    "label": "🍮 Postres",
+    "items": [
+      { "plato": "Tiramisú",       "precio": "6000"      },
+      { "plato": "Bombón Escocés", "precio": "5000"      },
+      { "plato": "Budín de Pan",   "precio": "4000"      },
+      { "plato": "Flan",           "precio": "4000"      },
+      { "plato": "Arroz con Leche","precio": "4000"      },
+      { "plato": "Queso y Dulce",  "precio": "4000"      },
+      { "plato": "Café",           "precio": "3000-4000" },
+      { "plato": "Té",             "precio": "4000"      }
+    ]
+  },
+  "bebidas": {
+    "label": "💧🍺 Sin alcohol",
+    "items": [
+      { "plato": "Agua 500cc",                        "precio": "3800"     },
+      { "plato": "Agua Saborizada",                   "precio": "4000"     },
+      { "plato": "Gaseosa 600cc",                     "precio": "4000"     },
+      { "plato": "361 Lata",                          "precio": "4000"     },
+      { "plato": "Heineken 473ml",                    "precio": "7000"     },
+      { "plato": "Quilmes Cristal / Stout / Stella",  "precio": "consultar"}
+    ]
+  },
+  "vinos": {
+    "label": "🍷 Vinos",
+    "items": [
+      { "plato": "Familia Gascón Cab. Sauv.", "precio": "12000" },
+      { "plato": "Andares Malbec / Rosé",     "precio": "12000" },
+      { "plato": "Privado Reserva",           "precio": "12000" },
+      { "plato": "Trumpeter Malbec",          "precio": "14000" },
+      { "plato": "Escorihuela Gascón",        "precio": "18000" },
+      { "plato": "Escorihuela Gascón 375ml",  "precio": "7000"  }
+    ]
+  },
+  "aperitivos": {
+    "label": "🥂 Aperitivos & Tragos",
+    "items": [
+      { "plato": "Aperol",               "precio": "consultar" },
+      { "plato": "Campari",              "precio": "consultar" },
+      { "plato": "Fernet ×2",            "precio": "consultar" },
+      { "plato": "Ferroviario",          "precio": "consultar" },
+      { "plato": "Vermut",               "precio": "consultar" },
+      { "plato": "Cuba Libre",           "precio": "consultar" },
+      { "plato": "Daiquiri",             "precio": "consultar" },
+      { "plato": "Jack Daniel's",        "precio": "14000"     },
+      { "plato": "Johnnie Walker Red",   "precio": "12000"     }
+    ]
+  }
+}
