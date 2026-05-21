@@ -80,6 +80,7 @@
     #setup-section p  { color:#aaa; font-size:0.78rem; line-height:1.5; margin-bottom:0.75rem; }
     #token-input { width:100%; background:#0D0D0D; border:1px solid #5a3a00; border-radius:8px; padding:0.65rem 0.8rem; font-size:0.82rem; color:#fff; outline:none; margin-bottom:0.6rem; }
     #save-token-btn { background:#D4A017; color:#000; border:none; border-radius:8px; padding:0.6rem 1.2rem; font-size:0.85rem; font-weight:700; cursor:pointer; }
+    #change-token-btn { background:none; border:none; color:#555; font-size:0.72rem; cursor:pointer; text-decoration:underline; display:block; margin:0.5rem auto 0; }
   </style>
 </head>
 <body>
@@ -113,6 +114,7 @@
     <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
     <button id="save-token-btn" onclick="saveToken()">Guardar token</button>
   </div>
+  <button id="change-token-btn" style="display:none" onclick="showTokenSetup()">Cambiar token de GitHub</button>
 
   <div style="height:5rem"></div>
 
@@ -223,6 +225,7 @@
     document.getElementById('sections').innerHTML = html;
     if (localStorage.getItem('gh_token')) {
       document.getElementById('setup-section').style.display = 'none';
+      document.getElementById('change-token-btn').style.display = 'block';
     }
   }
 
@@ -299,7 +302,11 @@
       const meta = await fetch(API_BASE, {
         headers: { Authorization:`token ${token}`, Accept:'application/vnd.github+json' }
       });
-      if (!meta.ok) throw new Error('No se pudo conectar con GitHub. Revisá el token.');
+      if (!meta.ok) {
+        localStorage.removeItem('gh_token');
+        document.getElementById('setup-section').style.display = 'block';
+        throw new Error('Token inválido o expirado. Ingresá uno nuevo abajo ↓');
+      }
       const { sha } = await meta.json();
 
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
@@ -330,7 +337,13 @@
     if (!t) return;
     localStorage.setItem('gh_token', t);
     document.getElementById('setup-section').style.display = 'none';
+    document.getElementById('change-token-btn').style.display = 'block';
     setStatus('Token guardado ✓', 'ok');
+  }
+
+  function showTokenSetup() {
+    document.getElementById('setup-section').style.display = 'block';
+    document.getElementById('setup-section').scrollIntoView({ behavior: 'smooth' });
   }
 </script>
 </body>
