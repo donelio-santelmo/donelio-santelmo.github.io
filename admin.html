@@ -8,70 +8,78 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0D0D0D; color: #F0F0F0; font-family: -apple-system, 'Inter', sans-serif; font-size: 15px; min-height: 100vh; }
 
-    /* ── LOGIN ── */
-    #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; gap: 1rem; }
-    .logo  { font-size: 2.5rem; font-style: italic; color: #FF4D00; font-weight: 700; }
-    .sub   { color: #aaa; font-size: 0.85rem; }
-    #login-screen input { width: 100%; max-width: 280px; background: #1A1A1A; border: 1px solid #333; border-radius: 12px; padding: 0.85rem 1rem; font-size: 1.1rem; color: #fff; text-align: center; letter-spacing: 0.2em; outline: none; }
-    #login-screen input:focus { border-color: #FF4D00; }
-    #login-btn { width: 100%; max-width: 280px; background: #FF4D00; color: #fff; border: none; border-radius: 12px; padding: 0.85rem; font-size: 1rem; font-weight: 600; cursor: pointer; }
-    #login-btn:active { background: #cc3d00; }
-    #login-error { color: #f87171; font-size: 0.85rem; display: none; }
+    /* LOGIN */
+    #login-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:2rem; gap:1rem; }
+    .logo { font-size:2.5rem; font-style:italic; color:#FF4D00; font-weight:700; }
+    .sub  { color:#aaa; font-size:0.85rem; }
+    #login-screen input { width:100%; max-width:280px; background:#1A1A1A; border:1px solid #333; border-radius:12px; padding:0.85rem 1rem; font-size:1.1rem; color:#fff; text-align:center; letter-spacing:0.2em; outline:none; }
+    #login-screen input:focus { border-color:#FF4D00; }
+    #login-btn { width:100%; max-width:280px; background:#FF4D00; color:#fff; border:none; border-radius:12px; padding:0.85rem; font-size:1rem; font-weight:600; cursor:pointer; }
+    #login-btn:active { background:#cc3d00; }
+    #login-error { color:#f87171; font-size:0.85rem; display:none; }
 
-    /* ── PANEL ── */
-    #admin-panel { display: none; padding-bottom: 7rem; }
-    .panel-header { background: #1A1A1A; border-bottom: 2px solid #FF4D00; padding: 1.2rem 1rem; text-align: center; }
-    .panel-header .logo { font-size: 1.5rem; }
-    .panel-header .sub  { margin-top: 0.2rem; }
+    /* PANEL */
+    #admin-panel { display:none; padding-bottom:7rem; }
+    .panel-header { background:#1A1A1A; border-bottom:2px solid #FF4D00; padding:1.2rem 1rem; text-align:center; }
+    .panel-header .logo { font-size:1.5rem; }
 
-    /* ── SECTIONS ── */
-    .section-card { margin: 1rem; background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 14px; overflow: hidden; }
-    .section-title { background: #2A2A2A; padding: 0.75rem 1rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #FF4D00; }
+    /* CONFIG */
+    .config-card { margin:1rem; background:#1A1A1A; border:1px solid #2A2A2A; border-radius:14px; overflow:hidden; }
+    .config-title { background:#2A2A2A; padding:0.75rem 1rem; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#FF4D00; }
+    .config-row { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; }
+    .config-label { font-size:0.82rem; color:#aaa; white-space:nowrap; }
+    .config-input { flex:1; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.5rem 0.75rem; font-size:0.88rem; color:#fff; outline:none; }
 
-    /* ── ITEM ROWS ── */
-    .item-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.7rem 1rem; border-bottom: 1px solid #1e1e1e; }
-    .item-fields { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
-    .name-input  { background: #0D0D0D; border: 1px solid #2e2e2e; border-radius: 7px; padding: 0.45rem 0.65rem; font-size: 0.88rem; color: #fff; width: 100%; outline: none; }
-    .nota-input  { background: transparent; border: none; border-bottom: 1px dashed #2a2a2a; padding: 0.2rem 0.65rem; font-size: 0.72rem; color: #777; width: 100%; outline: none; }
-    .nota-input::placeholder { color: #444; }
-    .name-input:focus { border-color: #FF4D00; }
-    .precio-input { width: 100px; background: #0D0D0D; border: 1px solid #2e2e2e; border-radius: 7px; padding: 0.45rem 0.65rem; font-size: 0.88rem; color: #fff; text-align: right; outline: none; flex-shrink: 0; }
-    .precio-input:focus  { border-color: #FF4D00; }
-    .precio-input.is-consultar { color: #FF4D00; font-style: italic; }
-    .del-btn { background: none; border: none; color: #555; font-size: 1.2rem; cursor: pointer; padding: 0.3rem 0.2rem; flex-shrink: 0; line-height: 1; }
-    .del-btn:hover { color: #f87171; }
+    /* SECTIONS */
+    .section-card { margin:1rem; background:#1A1A1A; border:1px solid #2A2A2A; border-radius:14px; overflow:hidden; }
+    .section-title { background:#2A2A2A; padding:0.75rem 1rem; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#FF4D00; }
 
-    .add-btn { display: block; width: calc(100% - 2rem); margin: 0.6rem 1rem; background: #1e1e1e; border: 1px dashed #3a3a3a; border-radius: 8px; color: #888; font-size: 0.82rem; padding: 0.55rem; cursor: pointer; text-align: center; }
-    .add-btn:hover { color: #FF4D00; border-color: #FF4D00; }
+    /* ITEM ROWS */
+    .item-row { display:flex; align-items:flex-start; gap:0.5rem; padding:0.7rem 1rem; border-bottom:1px solid #1e1e1e; }
+    .item-fields { flex:1; display:flex; flex-direction:column; gap:0.3rem; min-width:0; }
+    .name-input  { background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.45rem 0.65rem; font-size:0.88rem; color:#fff; width:100%; outline:none; }
+    .nota-input  { background:transparent; border:none; border-bottom:1px dashed #2a2a2a; padding:0.2rem 0.65rem; font-size:0.72rem; color:#777; width:100%; outline:none; }
+    .nota-input::placeholder { color:#444; }
+    .precio-input { width:100px; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.45rem 0.65rem; font-size:0.88rem; color:#fff; text-align:right; outline:none; flex-shrink:0; }
+    .precio-input.is-consultar { color:#FF4D00; font-style:italic; }
+    .del-btn { background:none; border:none; color:#555; font-size:1.3rem; cursor:pointer; padding:0.2rem; flex-shrink:0; line-height:1; }
+    .del-btn:hover { color:#f87171; }
+    .add-btn { display:block; width:calc(100% - 2rem); margin:0.6rem 1rem; background:#1e1e1e; border:1px dashed #3a3a3a; border-radius:8px; color:#888; font-size:0.82rem; padding:0.55rem; cursor:pointer; text-align:center; }
+    .add-btn:hover { color:#FF4D00; border-color:#FF4D00; }
 
-    .hint { margin: 0.5rem 1rem 0; padding: 0.6rem 0.8rem; background: #161616; border-radius: 8px; font-size: 0.72rem; color: #777; line-height: 1.5; }
+    /* PROMOS */
+    .promo-day-section { border-bottom:1px solid #1e1e1e; }
+    .promo-day-header { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 1rem; background:#161616; }
+    .promo-day-name { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#ccc; }
+    .promo-add-btn { background:none; border:1px solid #3a3a3a; border-radius:6px; color:#888; font-size:0.72rem; padding:0.3rem 0.6rem; cursor:pointer; }
+    .promo-add-btn:hover { color:#FF4D00; border-color:#FF4D00; }
+    .promo-item { padding:0.75rem 1rem; border-top:1px solid #1e1e1e; }
+    .promo-row1 { display:flex; gap:0.5rem; margin-bottom:0.4rem; align-items:center; }
+    .promo-emoji-in  { width:50px; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.4rem; font-size:1rem; text-align:center; color:#fff; outline:none; flex-shrink:0; }
+    .promo-titulo-in { flex:1; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.4rem 0.65rem; font-size:0.88rem; color:#fff; outline:none; }
+    .promo-desc-in, .promo-dish-in { width:100%; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.4rem 0.65rem; font-size:0.82rem; color:#ccc; outline:none; margin-top:0.35rem; resize:none; }
+    .promo-dish-in { color:#777; font-size:0.75rem; }
+    .field-label { font-size:0.65rem; color:#555; margin-top:0.35rem; display:block; }
+    input:focus, textarea:focus { border-color:#FF4D00 !important; }
 
-    /* ── PROMOS ── */
-    .promo-card { padding: 0.9rem 1rem; border-bottom: 1px solid #1e1e1e; }
-    .promo-dia  { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; margin-bottom: 0.5rem; }
-    .promo-row1 { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; }
-    .promo-emoji-in  { width: 52px; background: #0D0D0D; border: 1px solid #2e2e2e; border-radius: 7px; padding: 0.45rem; font-size: 1rem; text-align: center; color: #fff; outline: none; flex-shrink: 0; }
-    .promo-titulo-in { flex: 1; background: #0D0D0D; border: 1px solid #2e2e2e; border-radius: 7px; padding: 0.45rem 0.65rem; font-size: 0.88rem; color: #fff; outline: none; }
-    .promo-desc-in, .promo-dish-in { width: 100%; background: #0D0D0D; border: 1px solid #2e2e2e; border-radius: 7px; padding: 0.45rem 0.65rem; font-size: 0.82rem; color: #ccc; outline: none; margin-top: 0.4rem; resize: none; }
-    .promo-dish-in { color: #888; font-size: 0.75rem; }
-    .promo-label { font-size: 0.65rem; color: #555; margin-top: 0.4rem; display: block; }
-    input:focus, textarea:focus { border-color: #FF4D00 !important; }
+    /* HINT */
+    .hint { margin:0.5rem 1rem 0; padding:0.6rem 0.8rem; background:#161616; border-radius:8px; font-size:0.72rem; color:#777; line-height:1.5; }
 
-    /* ── SAVE BAR ── */
-    .save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0D0D0D; border-top: 1px solid #2A2A2A; padding: 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; align-items: center; }
-    #save-btn { width: 100%; max-width: 400px; background: #FF4D00; color: #fff; border: none; border-radius: 12px; padding: 0.9rem; font-size: 1rem; font-weight: 600; cursor: pointer; }
-    #save-btn:disabled { background: #555; cursor: not-allowed; }
-    #save-btn:active:not(:disabled) { background: #cc3d00; }
-    #status-msg { font-size: 0.8rem; min-height: 1.2rem; text-align: center; }
-    .ok  { color: #4ade80; }
-    .err { color: #f87171; }
+    /* SAVE BAR */
+    .save-bar { position:fixed; bottom:0; left:0; right:0; background:#0D0D0D; border-top:1px solid #2A2A2A; padding:0.9rem 1rem; display:flex; flex-direction:column; gap:0.4rem; align-items:center; }
+    #save-btn { width:100%; max-width:400px; background:#FF4D00; color:#fff; border:none; border-radius:12px; padding:0.9rem; font-size:1rem; font-weight:600; cursor:pointer; }
+    #save-btn:disabled { background:#555; cursor:not-allowed; }
+    #save-btn:active:not(:disabled) { background:#cc3d00; }
+    #status-msg { font-size:0.8rem; min-height:1.2rem; text-align:center; }
+    .ok  { color:#4ade80; }
+    .err { color:#f87171; }
 
-    /* ── SETUP ── */
-    #setup-section { margin: 1rem; background: #1a1208; border: 1px solid #5a3a00; border-radius: 14px; padding: 1rem; }
-    #setup-section h3 { color: #D4A017; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
-    #setup-section p  { color: #aaa; font-size: 0.78rem; line-height: 1.5; margin-bottom: 0.75rem; }
-    #token-input { width: 100%; background: #0D0D0D; border: 1px solid #5a3a00; border-radius: 8px; padding: 0.65rem 0.8rem; font-size: 0.82rem; color: #fff; outline: none; margin-bottom: 0.6rem; }
-    #save-token-btn { background: #D4A017; color: #000; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    /* SETUP */
+    #setup-section { margin:1rem; background:#1a1208; border:1px solid #5a3a00; border-radius:14px; padding:1rem; }
+    #setup-section h3 { color:#D4A017; font-size:0.8rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem; }
+    #setup-section p  { color:#aaa; font-size:0.78rem; line-height:1.5; margin-bottom:0.75rem; }
+    #token-input { width:100%; background:#0D0D0D; border:1px solid #5a3a00; border-radius:8px; padding:0.65rem 0.8rem; font-size:0.82rem; color:#fff; outline:none; margin-bottom:0.6rem; }
+    #save-token-btn { background:#D4A017; color:#000; border:none; border-radius:8px; padding:0.6rem 1.2rem; font-size:0.85rem; font-weight:700; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -90,11 +98,11 @@
 <div id="admin-panel">
   <div class="panel-header">
     <div class="logo">Don Elio</div>
-    <div class="sub">Cambiá los precios y tocá Guardar</div>
+    <div class="sub">Cambiá lo que necesites y tocá Guardar</div>
   </div>
 
   <div class="hint">
-    💡 Precio: escribí el número sin puntos (ej: <strong>9000</strong>). Sin precio fijo → escribí <strong>consultar</strong>.
+    💡 Precio: número sin puntos (ej: <strong>9000</strong>). Sin precio fijo → <strong>consultar</strong>.
   </div>
 
   <div id="sections"></div>
@@ -119,7 +127,6 @@
   const REPO     = 'donelio-santelmo/donelio-santelmo.github.io';
   const FILE     = 'data.json';
   const API_BASE = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
-
   const SECTION_ORDER = ['parrilla','mas','acompanamiento','postres','bebidas','vinos','aperitivos'];
   const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 
@@ -140,7 +147,6 @@
     }
   }
 
-  /* ── LOAD ── */
   async function loadData() {
     try {
       menuData = await fetch('data.json?v=' + Date.now()).then(r => r.json());
@@ -156,30 +162,40 @@
     return `<div class="item-row" data-section="${section}">
       <div class="item-fields">
         <input class="name-input"  placeholder="Nombre del plato"       value="${esc(item.plato)}" />
-        <input class="nota-input"  placeholder="Descripción (opcional)" value="${esc(item.nota || '')}" />
+        <input class="nota-input"  placeholder="Descripción (opcional)" value="${esc(item.nota||'')}" />
       </div>
-      <input class="precio-input ${isC ? 'is-consultar':''}" placeholder="precio"
+      <input class="precio-input ${isC?'is-consultar':''}" placeholder="precio"
              value="${esc(item.precio)}" oninput="onPrecioInput(this)" />
       <button class="del-btn" onclick="this.closest('.item-row').remove()" title="Eliminar">×</button>
     </div>`;
   }
 
-  function promoCardHTML(p, i) {
-    return `<div class="promo-card" data-idx="${i}">
-      <div class="promo-dia">${p.dia}</div>
+  function promoItemHTML(dia, p) {
+    return `<div class="promo-item" data-dia="${esc(dia)}">
       <div class="promo-row1">
         <input class="promo-emoji-in"  value="${esc(p.emoji)}"  placeholder="🥩" />
         <input class="promo-titulo-in" value="${esc(p.titulo)}" placeholder="Título de la promo" />
+        <button class="del-btn" onclick="this.closest('.promo-item').remove()" title="Eliminar">×</button>
       </div>
-      <span class="promo-label">Descripción que ve el cliente:</span>
+      <span class="field-label">Descripción que ve el cliente:</span>
       <textarea class="promo-desc-in" rows="2" placeholder="Descripción...">${esc(p.desc)}</textarea>
-      <span class="promo-label">Texto para WhatsApp (interno):</span>
-      <input class="promo-dish-in" value="${esc(p.dish)}" placeholder="Texto para el pedido por WA..." />
+      <span class="field-label">Texto para WhatsApp (al tocar el botón):</span>
+      <input class="promo-dish-in" value="${esc(p.dish)}" placeholder="Ej: Milanesa con 10% OFF (promo lunes)" />
     </div>`;
   }
 
   function renderAll(d) {
-    let html = SECTION_ORDER.map(key => {
+    // Config card
+    let html = `<div class="config-card">
+      <div class="config-title">⚙️ Configuración general</div>
+      <div class="config-row">
+        <span class="config-label">🕛 Horario:</span>
+        <input class="config-input" id="config-horario" value="${esc(d.config?.horario||'')}" placeholder="Lun a Vie · 12:30 a 16:00 hs" />
+      </div>
+    </div>`;
+
+    // Menu sections
+    html += SECTION_ORDER.map(key => {
       const sec  = d[key];
       const rows = sec.items.map(item => itemRowHTML(key, item)).join('');
       return `<div class="section-card">
@@ -189,9 +205,19 @@
       </div>`;
     }).join('');
 
+    // Promos section
     html += `<div class="section-card" style="margin-top:1.5rem">
       <div class="section-title">📅 Promos del día</div>
-      ${d.promos.map((p, i) => promoCardHTML(p, i)).join('')}
+      ${DIAS.map(dia => {
+        const lista = (d.promos[dia] || []).map(p => promoItemHTML(dia, p)).join('');
+        return `<div class="promo-day-section" data-dia="${dia}">
+          <div class="promo-day-header">
+            <span class="promo-day-name">${dia}</span>
+            <button class="promo-add-btn" onclick="addPromo('${dia}')">+ Agregar promo</button>
+          </div>
+          <div class="promo-list" id="promos-${dia}">${lista}</div>
+        </div>`;
+      }).join('')}
     </div>`;
 
     document.getElementById('sections').innerHTML = html;
@@ -202,11 +228,18 @@
 
   function addItem(section) {
     const container = document.getElementById('items-' + section);
-    const div = document.createElement('div');
-    div.innerHTML = itemRowHTML(section, { plato: '', nota: '', precio: '' });
-    const row = div.firstElementChild;
-    container.appendChild(row);
-    row.querySelector('.name-input').focus();
+    const tmp = document.createElement('div');
+    tmp.innerHTML = itemRowHTML(section, { plato:'', nota:'', precio:'' });
+    container.appendChild(tmp.firstElementChild);
+    container.lastElementChild.querySelector('.name-input').focus();
+  }
+
+  function addPromo(dia) {
+    const container = document.getElementById('promos-' + dia);
+    const tmp = document.createElement('div');
+    tmp.innerHTML = promoItemHTML(dia, { emoji:'🥩', titulo:'', desc:'', dish:'' });
+    container.appendChild(tmp.firstElementChild);
+    container.lastElementChild.querySelector('.promo-titulo-in').focus();
   }
 
   function onPrecioInput(input) {
@@ -222,8 +255,12 @@
     btn.disabled = true;
     setStatus('Guardando...', '');
 
-    // Collect menu items
     const newData = JSON.parse(JSON.stringify(menuData));
+
+    // Config
+    newData.config = { horario: document.getElementById('config-horario').value.trim() };
+
+    // Menu items
     SECTION_ORDER.forEach(key => {
       newData[key].items = [];
       document.querySelectorAll(`.item-row[data-section="${key}"]`).forEach(row => {
@@ -238,21 +275,26 @@
       });
     });
 
-    // Collect promos
-    newData.promos = [];
-    document.querySelectorAll('.promo-card').forEach((card, i) => {
-      newData.promos.push({
-        dia:    menuData.promos[i].dia,
-        emoji:  card.querySelector('.promo-emoji-in').value.trim()  || '🥩',
-        titulo: card.querySelector('.promo-titulo-in').value.trim(),
-        desc:   card.querySelector('.promo-desc-in').value.trim(),
-        dish:   card.querySelector('.promo-dish-in').value.trim(),
+    // Promos
+    newData.promos = {};
+    DIAS.forEach(dia => {
+      const items = [];
+      document.querySelectorAll(`#promos-${dia} .promo-item`).forEach(card => {
+        const titulo = card.querySelector('.promo-titulo-in').value.trim();
+        if (!titulo) return;
+        items.push({
+          emoji:  card.querySelector('.promo-emoji-in').value.trim()  || '🥩',
+          titulo,
+          desc:   card.querySelector('.promo-desc-in').value.trim(),
+          dish:   card.querySelector('.promo-dish-in').value.trim(),
+        });
       });
+      newData.promos[dia] = items;
     });
 
     try {
       const meta = await fetch(API_BASE, {
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' }
+        headers: { Authorization:`token ${token}`, Accept:'application/vnd.github+json' }
       });
       if (!meta.ok) throw new Error('No se pudo conectar con GitHub. Revisá el token.');
       const { sha } = await meta.json();
@@ -260,8 +302,8 @@
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
       const push = await fetch(API_BASE, {
         method: 'PUT',
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'Actualizar carta desde admin', content, sha }),
+        headers: { Authorization:`token ${token}`, Accept:'application/vnd.github+json', 'Content-Type':'application/json' },
+        body: JSON.stringify({ message:'Actualizar carta desde admin', content, sha }),
       });
       if (!push.ok) throw new Error('Error al guardar. Intentá de nuevo.');
 
@@ -280,7 +322,6 @@
     el.className   = cls;
   }
 
-  /* ── TOKEN SETUP ── */
   function saveToken() {
     const t = document.getElementById('token-input').value.trim();
     if (!t) return;

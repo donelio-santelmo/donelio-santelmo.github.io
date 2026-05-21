@@ -99,7 +99,7 @@
     <span id="roast-dot" class="w-2.5 h-2.5 rounded-full inline-block"></span>
     <span id="roast-text"></span>
   </div>
-  <p class="text-gray-300 text-xs mb-6">🕛 Lun a Vie · 12:30 a 16:00 hs</p>
+  <p class="text-gray-300 text-xs mb-6">🕛 <span id="horario-hero">Lun a Vie · 12:30 a 16:00 hs</span></p>
 
   <div class="flex flex-col sm:flex-row gap-3">
     <a href="#promo" class="bg-ember hover:bg-orange-600 text-white font-semibold px-6 py-2.5 rounded-full ember-glow transition-all text-sm">
@@ -118,18 +118,8 @@
     <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1">Hoy te toca</p>
     <h2 class="fileteado text-3xl sm:text-4xl text-white mb-5">Promo del Día</h2>
 
-    <div id="promo-card" class="animate-badgePop bg-smoke border border-ember/40 rounded-2xl p-6 ember-glow">
-      <div class="text-4xl mb-3" id="promo-emoji">🥩</div>
-      <div class="text-ember text-xs font-bold tracking-widest uppercase mb-1" id="promo-day">—</div>
-      <h3 class="fileteado text-2xl text-white mb-2" id="promo-title">Cargando...</h3>
-      <p class="text-gray-100 text-sm" id="promo-desc"></p>
-      <div class="mt-5">
-        <a id="promo-wa" href="#" target="_blank"
-           class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-2.5 rounded-full transition-all ember-glow text-sm">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Pedir esta promo
-        </a>
-      </div>
+    <div id="promo-cards" class="space-y-4">
+      <div class="animate-badgePop bg-smoke border border-ember/40 rounded-2xl p-6 text-center text-gray-400 text-sm">Cargando promos...</div>
     </div>
   </div>
 </section>
@@ -194,7 +184,7 @@
       <div class="flex flex-col gap-3 text-sm mb-5">
         <div class="bg-smoke rounded-xl p-3">
           <p class="text-ember font-semibold text-xs mb-1">🕛 Horario</p>
-          <p class="text-gray-100 text-xs">Lunes a Viernes: 12:30–16:00</p>
+          <p class="text-gray-100 text-xs" id="horario-ubicacion">Lunes a Viernes: 12:30–16:00</p>
         </div>
         <div class="bg-smoke rounded-xl p-3">
           <p class="text-ember font-semibold text-xs mb-1">🎉 Eventos</p>
@@ -270,17 +260,37 @@
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
-  function loadPromo(promos) {
-    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
-    const day = now.getDay();
-    const p = promos[day === 0 ? 6 : day - 1];
-    document.getElementById('promo-emoji').textContent = p.emoji;
-    document.getElementById('promo-day').textContent = p.dia;
-    document.getElementById('promo-title').textContent = p.titulo;
-    document.getElementById('promo-desc').textContent = p.desc;
-    document.getElementById('promo-wa').href = waLink(`Hola Don Elio! Vengo por la promo de hoy: ${p.dish}. ¿Tienen mesa disponible?`);
+  const WA_SVG = `<svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+  function loadPromo(data) {
+    const now      = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
+    const DIAS_MAP = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const dayName  = DIAS_MAP[now.getDay()];
+    const lista    = (data.promos[dayName] || []);
+
+    document.getElementById('promo-cards').innerHTML = lista.length
+      ? lista.map(p => `
+          <div class="animate-badgePop bg-smoke border border-ember/40 rounded-2xl p-6 ember-glow">
+            <div class="text-4xl mb-3">${p.emoji}</div>
+            <div class="text-ember text-xs font-bold tracking-widest uppercase mb-1">${dayName}</div>
+            <h3 class="fileteado text-2xl text-white mb-2">${p.titulo}</h3>
+            <p class="text-gray-100 text-sm">${p.desc}</p>
+            <div class="mt-5">
+              <a href="${waLink(`Hola Don Elio! Vengo por la promo de hoy: ${p.dish}. ¿Tienen mesa disponible?`)}" target="_blank"
+                 class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-2.5 rounded-full transition-all ember-glow text-sm">
+                ${WA_SVG} Pedir esta promo
+              </a>
+            </div>
+          </div>`).join('')
+      : `<div class="bg-smoke border border-smoke rounded-2xl p-6 text-gray-400 text-sm text-center">Sin promos para hoy.</div>`;
+
+    if (data.config?.horario) {
+      document.getElementById('horario-hero').textContent      = data.config.horario;
+      document.getElementById('horario-ubicacion').textContent = data.config.horario;
+    }
+
     const generalMsg = waLink(`Hola! Quiero reservar una mesa en Don Elio.`);
-    document.getElementById('nav-wa').href = generalMsg;
+    document.getElementById('nav-wa').href   = generalMsg;
     document.getElementById('float-wa').href = generalMsg;
   }
 

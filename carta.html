@@ -49,7 +49,7 @@
   <div class="text-3xl mb-1">🔥</div>
   <h1 class="fileteado text-4xl sm:text-5xl text-ember mb-1">Don Elio</h1>
   <p class="text-gray-100 text-sm tracking-widest uppercase font-semibold mb-1">La Carta</p>
-  <p class="text-gray-300 text-xs">Parrilla · Chacabuco 454 · San Telmo · Lun–Vie 12:30–16 hs</p>
+  <p class="text-gray-300 text-xs">Parrilla · Chacabuco 454 · San Telmo · <span id="horario-carta">Lun–Vie 12:30–16 hs</span></p>
   <div class="section-divider max-w-xs mx-auto mt-4"></div>
   <p class="text-gray-300 text-xs">Tocá cualquier plato para pedirlo por WhatsApp</p>
 </header>
@@ -164,7 +164,10 @@
 
   fetch('data.json?v=' + Date.now())
     .then(r => r.json())
-    .then(renderMenu)
+    .then(d => {
+      if (d.config?.horario) document.getElementById('horario-carta').textContent = d.config.horario;
+      renderMenu(d);
+    })
     .catch(() => {
       document.getElementById('menu-grid').innerHTML =
         '<div class="sm:col-span-2 text-center py-8 text-gray-400 text-sm">Error al cargar la carta. Intentá de nuevo.</div>';
