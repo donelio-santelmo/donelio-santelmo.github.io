@@ -34,8 +34,25 @@
     .section-card { margin:1rem; background:#1A1A1A; border:1px solid #2A2A2A; border-radius:14px; overflow:hidden; }
     .section-title { background:#2A2A2A; padding:0.75rem 1rem; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#FF4D00; }
 
+    /* DRAG HANDLE */
+    .drag-handle {
+      color: #3a3a3a;
+      cursor: grab;
+      font-size: 1.1rem;
+      padding: 0.2rem 0.1rem;
+      flex-shrink: 0;
+      user-select: none;
+      line-height: 1;
+      align-self: center;
+      transition: color 0.15s;
+    }
+    .drag-handle:hover { color: #888; }
+    .drag-handle:active { cursor: grabbing; }
+
     /* ITEM ROWS */
-    .item-row { display:flex; align-items:flex-start; gap:0.5rem; padding:0.7rem 1rem; border-bottom:1px solid #1e1e1e; }
+    .item-row { display:flex; align-items:flex-start; gap:0.5rem; padding:0.6rem 0.75rem 0.6rem 0.5rem; border-bottom:1px solid #1e1e1e; transition: background 0.15s; }
+    .item-row.drag-over { background: #1e2a1e; border-top: 2px solid #FF4D00; }
+    .item-row.dragging  { opacity: 0.4; }
     .item-fields { flex:1; display:flex; flex-direction:column; gap:0.3rem; min-width:0; }
     .name-input  { background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.45rem 0.65rem; font-size:0.88rem; color:#fff; width:100%; outline:none; }
     .nota-input  { background:transparent; border:none; border-bottom:1px dashed #2a2a2a; padding:0.2rem 0.65rem; font-size:0.72rem; color:#777; width:100%; outline:none; }
@@ -53,7 +70,10 @@
     .promo-day-name { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#ccc; }
     .promo-add-btn { background:none; border:1px solid #3a3a3a; border-radius:6px; color:#888; font-size:0.72rem; padding:0.3rem 0.6rem; cursor:pointer; }
     .promo-add-btn:hover { color:#FF4D00; border-color:#FF4D00; }
-    .promo-item { padding:0.75rem 1rem; border-top:1px solid #1e1e1e; }
+    .promo-item { padding:0.75rem 0.75rem 0.75rem 0.5rem; border-top:1px solid #1e1e1e; display:flex; gap:0.5rem; align-items:flex-start; transition: background 0.15s; }
+    .promo-item.drag-over { background: #1e2a1e; border-top: 2px solid #FF4D00; }
+    .promo-item.dragging  { opacity: 0.4; }
+    .promo-content { flex:1; min-width:0; }
     .promo-row1 { display:flex; gap:0.5rem; margin-bottom:0.4rem; align-items:center; }
     .promo-emoji-in  { width:50px; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.4rem; font-size:1rem; text-align:center; color:#fff; outline:none; flex-shrink:0; }
     .promo-titulo-in { flex:1; background:#0D0D0D; border:1px solid #2e2e2e; border-radius:7px; padding:0.4rem 0.65rem; font-size:0.88rem; color:#fff; outline:none; }
@@ -103,7 +123,7 @@
   </div>
 
   <div class="hint">
-    💡 Precio: número sin puntos (ej: <strong>9000</strong>). Sin precio fijo → <strong>consultar</strong>.
+    💡 Precio: número sin puntos (ej: <strong>9000</strong>). Sin precio fijo → <strong>consultar</strong>. &nbsp;⠿ Arrastrá para reordenar.
   </div>
 
   <div id="sections"></div>
@@ -133,6 +153,7 @@
   const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 
   let menuData = null;
+  let dragSrc  = null;
 
   function esc(s) {
     return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -158,10 +179,47 @@
     }
   }
 
+  /* ── DRAG & DROP ── */
+  function initDrag(container, itemSelector) {
+    container.addEventListener('dragstart', e => {
+      const row = e.target.closest(itemSelector);
+      if (!row) return;
+      dragSrc = row;
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => row.classList.add('dragging'), 0);
+    });
+
+    container.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const row = e.target.closest(itemSelector);
+      if (!row || row === dragSrc) return;
+      container.querySelectorAll(itemSelector).forEach(r => r.classList.remove('drag-over'));
+      row.classList.add('drag-over');
+      const rect = row.getBoundingClientRect();
+      const mid  = rect.top + rect.height / 2;
+      if (e.clientY < mid) {
+        container.insertBefore(dragSrc, row);
+      } else {
+        container.insertBefore(dragSrc, row.nextSibling);
+      }
+    });
+
+    container.addEventListener('dragend', () => {
+      container.querySelectorAll(itemSelector).forEach(r => {
+        r.classList.remove('dragging', 'drag-over');
+      });
+      dragSrc = null;
+    });
+
+    container.addEventListener('drop', e => e.preventDefault());
+  }
+
   /* ── RENDER ── */
   function itemRowHTML(section, item) {
     const isC = item.precio === 'consultar';
-    return `<div class="item-row" data-section="${section}">
+    return `<div class="item-row" draggable="true" data-section="${section}">
+      <span class="drag-handle" title="Arrastrar para reordenar">⠿</span>
       <div class="item-fields">
         <input class="name-input"  placeholder="Nombre del plato"       value="${esc(item.plato)}" />
         <input class="nota-input"  placeholder="Descripción (opcional)" value="${esc(item.nota||'')}" />
@@ -173,21 +231,23 @@
   }
 
   function promoItemHTML(dia, p) {
-    return `<div class="promo-item" data-dia="${esc(dia)}">
-      <div class="promo-row1">
-        <input class="promo-emoji-in"  value="${esc(p.emoji)}"  placeholder="🥩" />
-        <input class="promo-titulo-in" value="${esc(p.titulo)}" placeholder="Título de la promo" />
-        <button class="del-btn" onclick="this.closest('.promo-item').remove()" title="Eliminar">×</button>
+    return `<div class="promo-item" draggable="true" data-dia="${esc(dia)}">
+      <span class="drag-handle" title="Arrastrar para reordenar">⠿</span>
+      <div class="promo-content">
+        <div class="promo-row1">
+          <input class="promo-emoji-in"  value="${esc(p.emoji)}"  placeholder="🥩" />
+          <input class="promo-titulo-in" value="${esc(p.titulo)}" placeholder="Título de la promo" />
+          <button class="del-btn" onclick="this.closest('.promo-item').remove()" title="Eliminar">×</button>
+        </div>
+        <span class="field-label">Descripción que ve el cliente:</span>
+        <textarea class="promo-desc-in" rows="2" placeholder="Descripción...">${esc(p.desc)}</textarea>
+        <span class="field-label">Texto para WhatsApp (al tocar el botón):</span>
+        <input class="promo-dish-in" value="${esc(p.dish)}" placeholder="Ej: Milanesa con 10% OFF (promo lunes)" />
       </div>
-      <span class="field-label">Descripción que ve el cliente:</span>
-      <textarea class="promo-desc-in" rows="2" placeholder="Descripción...">${esc(p.desc)}</textarea>
-      <span class="field-label">Texto para WhatsApp (al tocar el botón):</span>
-      <input class="promo-dish-in" value="${esc(p.dish)}" placeholder="Ej: Milanesa con 10% OFF (promo lunes)" />
     </div>`;
   }
 
   function renderAll(d) {
-    // Config card
     let html = `<div class="config-card">
       <div class="config-title">⚙️ Configuración general</div>
       <div class="config-row">
@@ -196,7 +256,6 @@
       </div>
     </div>`;
 
-    // Menu sections
     html += SECTION_ORDER.map(key => {
       const sec  = d[key];
       const rows = sec.items.map(item => itemRowHTML(key, item)).join('');
@@ -207,7 +266,6 @@
       </div>`;
     }).join('');
 
-    // Promos section
     html += `<div class="section-card" style="margin-top:1.5rem">
       <div class="section-title">📅 Promos del día</div>
       ${DIAS.map(dia => {
@@ -223,6 +281,15 @@
     </div>`;
 
     document.getElementById('sections').innerHTML = html;
+
+    // Init drag on each section container
+    SECTION_ORDER.forEach(key => {
+      initDrag(document.getElementById('items-' + key), '.item-row');
+    });
+    DIAS.forEach(dia => {
+      initDrag(document.getElementById('promos-' + dia), '.promo-item');
+    });
+
     if (localStorage.getItem('gh_token')) {
       document.getElementById('setup-section').style.display = 'none';
       document.getElementById('change-token-btn').style.display = 'block';
@@ -260,10 +327,8 @@
 
     const newData = JSON.parse(JSON.stringify(menuData));
 
-    // Config
     newData.config = { horario: document.getElementById('config-horario').value.trim() };
 
-    // Menu items
     SECTION_ORDER.forEach(key => {
       newData[key].items = [];
       document.querySelectorAll(`.item-row[data-section="${key}"]`).forEach(row => {
@@ -278,7 +343,6 @@
       });
     });
 
-    // Promos — usar getElementById para evitar problemas con acentos en selectores CSS
     newData.promos = {};
     DIAS.forEach(dia => {
       const items = [];
