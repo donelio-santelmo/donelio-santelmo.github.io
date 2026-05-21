@@ -275,20 +275,23 @@
       });
     });
 
-    // Promos
+    // Promos — usar getElementById para evitar problemas con acentos en selectores CSS
     newData.promos = {};
     DIAS.forEach(dia => {
       const items = [];
-      document.querySelectorAll(`#promos-${dia} .promo-item`).forEach(card => {
-        const titulo = card.querySelector('.promo-titulo-in').value.trim();
-        if (!titulo) return;
-        items.push({
-          emoji:  card.querySelector('.promo-emoji-in').value.trim()  || '🥩',
-          titulo,
-          desc:   card.querySelector('.promo-desc-in').value.trim(),
-          dish:   card.querySelector('.promo-dish-in').value.trim(),
+      const container = document.getElementById('promos-' + dia);
+      if (container) {
+        container.querySelectorAll('.promo-item').forEach(card => {
+          const titulo = card.querySelector('.promo-titulo-in').value.trim();
+          if (!titulo) return;
+          items.push({
+            emoji:  card.querySelector('.promo-emoji-in').value.trim() || '🥩',
+            titulo,
+            desc:   card.querySelector('.promo-desc-in').value.trim(),
+            dish:   card.querySelector('.promo-dish-in').value.trim(),
+          });
         });
-      });
+      }
       newData.promos[dia] = items;
     });
 
