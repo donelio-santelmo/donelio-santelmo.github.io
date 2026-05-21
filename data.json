@@ -3,14 +3,14 @@
     "label": "🥩 Parrilla",
     "nota": "Todos incluyen guarnición · plato o sándwich",
     "items": [
-      { "plato": "Chorizo",          "precio": "9000"     },
-      { "plato": "Pechuga",          "precio": "11000"    },
-      { "plato": "Bondiola",         "precio": "11000"    },
-      { "plato": "Cuadril",          "precio": "15000"    },
-      { "plato": "Asado Banderita",  "precio": "15000"    },
-      { "plato": "Vacío",            "precio": "17000"    },
-      { "plato": "Parrillada",       "precio": "35000"    },
-      { "plato": "Provoleta",        "precio": "consultar"}
+      { "plato": "Chorizo",          "precio": "9000"      },
+      { "plato": "Pechuga",          "precio": "11000"     },
+      { "plato": "Bondiola",         "precio": "11000"     },
+      { "plato": "Cuadril",          "precio": "15000"     },
+      { "plato": "Asado Banderita",  "precio": "15000"     },
+      { "plato": "Vacío",            "precio": "17000"     },
+      { "plato": "Parrillada",       "precio": "35000"     },
+      { "plato": "Provoleta",        "precio": "consultar" }
     ]
   },
   "mas": {
@@ -27,34 +27,34 @@
   "acompanamiento": {
     "label": "🍟 Para Acompañar",
     "items": [
-      { "plato": "Ensalada",                   "precio": "3500"     },
-      { "plato": "Papas Fritas",               "precio": "4000"     },
-      { "plato": "Puré / Papas al Romero",     "precio": "4000"     },
-      { "plato": "Provoleta",                  "precio": "consultar"}
+      { "plato": "Ensalada",               "precio": "3500"      },
+      { "plato": "Papas Fritas",           "precio": "4000"      },
+      { "plato": "Puré / Papas al Romero", "precio": "4000"      },
+      { "plato": "Provoleta",              "precio": "consultar" }
     ]
   },
   "postres": {
     "label": "🍮 Postres",
     "items": [
-      { "plato": "Tiramisú",       "precio": "6000"      },
-      { "plato": "Bombón Escocés", "precio": "5000"      },
-      { "plato": "Budín de Pan",   "precio": "4000"      },
-      { "plato": "Flan",           "precio": "4000"      },
-      { "plato": "Arroz con Leche","precio": "4000"      },
-      { "plato": "Queso y Dulce",  "precio": "4000"      },
-      { "plato": "Café",           "precio": "3000-4000" },
-      { "plato": "Té",             "precio": "4000"      }
+      { "plato": "Tiramisú",        "precio": "6000"      },
+      { "plato": "Bombón Escocés",  "precio": "5000"      },
+      { "plato": "Budín de Pan",    "precio": "4000"      },
+      { "plato": "Flan",            "precio": "4000"      },
+      { "plato": "Arroz con Leche", "precio": "4000"      },
+      { "plato": "Queso y Dulce",   "precio": "4000"      },
+      { "plato": "Café",            "precio": "3000-4000" },
+      { "plato": "Té",              "precio": "4000"      }
     ]
   },
   "bebidas": {
     "label": "💧🍺 Sin alcohol",
     "items": [
-      { "plato": "Agua 500cc",                        "precio": "3800"     },
-      { "plato": "Agua Saborizada",                   "precio": "4000"     },
-      { "plato": "Gaseosa 600cc",                     "precio": "4000"     },
-      { "plato": "361 Lata",                          "precio": "4000"     },
-      { "plato": "Heineken 473ml",                    "precio": "7000"     },
-      { "plato": "Quilmes Cristal / Stout / Stella",  "precio": "consultar"}
+      { "plato": "Agua 500cc",                       "precio": "3800"      },
+      { "plato": "Agua Saborizada",                  "precio": "4000"      },
+      { "plato": "Gaseosa 600cc",                    "precio": "4000"      },
+      { "plato": "361 Lata",                         "precio": "4000"      },
+      { "plato": "Heineken 473ml",                   "precio": "7000"      },
+      { "plato": "Quilmes Cristal / Stout / Stella", "precio": "consultar" }
     ]
   },
   "vinos": {
@@ -71,15 +71,24 @@
   "aperitivos": {
     "label": "🥂 Aperitivos & Tragos",
     "items": [
-      { "plato": "Aperol",               "precio": "consultar" },
-      { "plato": "Campari",              "precio": "consultar" },
-      { "plato": "Fernet ×2",            "precio": "consultar" },
-      { "plato": "Ferroviario",          "precio": "consultar" },
-      { "plato": "Vermut",               "precio": "consultar" },
-      { "plato": "Cuba Libre",           "precio": "consultar" },
-      { "plato": "Daiquiri",             "precio": "consultar" },
-      { "plato": "Jack Daniel's",        "precio": "14000"     },
-      { "plato": "Johnnie Walker Red",   "precio": "12000"     }
+      { "plato": "Aperol",             "precio": "consultar" },
+      { "plato": "Campari",            "precio": "consultar" },
+      { "plato": "Fernet ×2",          "precio": "consultar" },
+      { "plato": "Ferroviario",        "precio": "consultar" },
+      { "plato": "Vermut",             "precio": "consultar" },
+      { "plato": "Cuba Libre",         "precio": "consultar" },
+      { "plato": "Daiquiri",           "precio": "consultar" },
+      { "plato": "Jack Daniel's",      "precio": "14000"     },
+      { "plato": "Johnnie Walker Red", "precio": "12000"     }
     ]
-  }
+  },
+  "promos": [
+    { "dia": "Lunes",     "emoji": "🥩", "titulo": "10% OFF en Milanesa",                  "desc": "El lunes arranca bien: 10% de descuento en la Milanesa. Mostrá esta pantalla al pedir.",                         "dish": "Milanesa con 10% OFF (promo lunes)" },
+    { "dia": "Martes",    "emoji": "🍷", "titulo": "Copa de vino con tu corte",             "desc": "Pedí cualquier corte de parrilla y la copa de Privado Reserva va de la casa. Martes de vino.",                   "dish": "Corte de parrilla + copa Privado Reserva de cortesía (promo martes)" },
+    { "dia": "Miércoles", "emoji": "🐷", "titulo": "Combo Bondiola + Gaseosa",              "desc": "El miércoles te salvamos el mediodía: Bondiola + Gaseosa a precio combo. Aprovechalo.",                          "dish": "Combo Bondiola + Gaseosa precio especial (promo miércoles)" },
+    { "dia": "Jueves",    "emoji": "🍟", "titulo": "Papas Fritas gratis con tu Vacío",      "desc": "Pedí el Vacío y las Papas Fritas van de regalo. Jueves de clásico completo.",                                    "dish": "Vacío + Papas Fritas de regalo (promo jueves)" },
+    { "dia": "Viernes",   "emoji": "🔥", "titulo": "3x2 en Chorizos",                       "desc": "Viernes de piqueo: pedís 3 Chorizos y pagás 2. Ideal para compartir entre amigos.",                              "dish": "3x2 en Chorizos (promo viernes)" },
+    { "dia": "Sábado",    "emoji": "🥗", "titulo": "Guarnición gratis con tu Asado",        "desc": "Con cualquier corte de parrilla, elegís una guarnición de la casa sin cargo. Sábado de asado completo.",         "dish": "Corte de parrilla + Guarnición de regalo (promo sábado)" },
+    { "dia": "Domingo",   "emoji": "🍮", "titulo": "Postre de cortesía para la mesa",       "desc": "Mesas de 3 o más personas reciben un postre de cortesía. Domingo en familia en Don Elio.",                       "dish": "Postre de cortesía para mesas de 3 o más (promo domingo)" }
+  ]
 }

@@ -255,15 +255,6 @@
 <script>
   const WA_NUMBER = '5491161162391';
 
-  const PROMOS = [
-    { day: 'Lunes',     emoji: '🥩', title: '10% OFF en Milanesa',                  desc: 'El lunes arranca bien: 10% de descuento en la Milanesa. Mostrá esta pantalla al pedir.',                         dish: 'Milanesa con 10% OFF (promo lunes)' },
-    { day: 'Martes',    emoji: '🍷', title: 'Copa de vino con tu corte de parrilla', desc: 'Pedí cualquier corte de parrilla y la copa de Privado Reserva va de la casa. Martes de vino.',                   dish: 'Corte de parrilla + copa Privado Reserva de cortesía (promo martes)' },
-    { day: 'Miércoles', emoji: '🐷', title: 'Combo Bondiola + Gaseosa especial',     desc: 'El miércoles te salvamos el mediodía: Bondiola + Gaseosa a precio combo. Aprovechalo.',                          dish: 'Combo Bondiola + Gaseosa precio especial (promo miércoles)' },
-    { day: 'Jueves',    emoji: '🍟', title: 'Papas Fritas gratis con tu Vacío',      desc: 'Pedí el Vacío y las Papas Fritas van de regalo. Jueves de clásico completo.',                                    dish: 'Vacío + Papas Fritas de regalo (promo jueves)' },
-    { day: 'Viernes',   emoji: '🔥', title: '3x2 en Chorizos',                       desc: 'Viernes de piqueo: pedís 3 Chorizos y pagás 2. Ideal para compartir entre amigos.',                              dish: '3x2 en Chorizos (promo viernes)' },
-    { day: 'Sábado',    emoji: '🥗', title: 'Guarnición gratis con tu Asado',        desc: 'Con cualquier corte de parrilla, elegís una guarnición de la casa sin cargo. Sábado de asado completo.',         dish: 'Corte de parrilla + Guarnición de regalo (promo sábado)' },
-    { day: 'Domingo',   emoji: '🍮', title: 'Postre de cortesía para la mesa',       desc: 'Mesas de 3 o más personas reciben un postre de cortesía. Domingo en familia en Don Elio.',                       dish: 'Postre de cortesía para mesas de 3 o más (promo domingo)' },
-  ];
 
   const COMBOS = [
     { plato: 'Vacío + Papas Fritas',           extra: '+ Gaseosa incluida' },
@@ -279,13 +270,13 @@
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
-  function loadPromo() {
+  function loadPromo(promos) {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
     const day = now.getDay();
-    const p = PROMOS[day === 0 ? 6 : day - 1];
+    const p = promos[day === 0 ? 6 : day - 1];
     document.getElementById('promo-emoji').textContent = p.emoji;
-    document.getElementById('promo-day').textContent = p.day;
-    document.getElementById('promo-title').textContent = p.title;
+    document.getElementById('promo-day').textContent = p.dia;
+    document.getElementById('promo-title').textContent = p.titulo;
     document.getElementById('promo-desc').textContent = p.desc;
     document.getElementById('promo-wa').href = waLink(`Hola Don Elio! Vengo por la promo de hoy: ${p.dish}. ¿Tienen mesa disponible?`);
     const generalMsg = waLink(`Hola! Quiero reservar una mesa en Don Elio.`);
@@ -339,10 +330,8 @@
     }).join('');
   }
 
-  function loadMenuFromData() {
-    fetch('data.json?v=' + Date.now())
-      .then(r => r.json())
-      .then(d => {
+  function loadMenuFromData(d) {
+    {
         document.getElementById('menu-grid').innerHTML = `
           <div class="bg-ash border border-smoke rounded-xl p-5">
             <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${d.parrilla.label}</h3>
@@ -378,7 +367,7 @@
             window.open(waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`), '_blank');
           });
         });
-      });
+    }
   }
 
   // Slot machine
@@ -522,11 +511,12 @@
   })();
 
   document.addEventListener('DOMContentLoaded', () => {
-    loadPromo();
     updateRoastTracker();
     setInterval(updateRoastTracker, 60000);
     initReveal();
-    loadMenuFromData();
+    fetch('data.json?v=' + Date.now())
+      .then(r => r.json())
+      .then(d => { loadPromo(d.promos); loadMenuFromData(d); });
   });
 </script>
 </body>
