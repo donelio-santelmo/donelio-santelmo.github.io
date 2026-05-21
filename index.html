@@ -526,7 +526,7 @@
     initReveal();
     fetch('data.json?v=' + Date.now())
       .then(r => r.json())
-      .then(d => { loadPromo(d.promos); loadMenuFromData(d); });
+      .then(d => { loadPromo(d); loadMenuFromData(d); });
   });
 </script>
 </body>
