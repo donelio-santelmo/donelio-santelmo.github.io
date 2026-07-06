@@ -167,19 +167,19 @@
     "items": [
       {
         "plato": "Familia Gascón Cab. Sauv.",
-        "precio": "12000"
+        "precio": "14000"
       },
       {
         "plato": "Andares Malbec / Rosé",
-        "precio": "12000"
+        "precio": "14000"
       },
       {
         "plato": "Privado Reserva",
-        "precio": "12000"
+        "precio": "18000"
       },
       {
         "plato": "Trumpeter Malbec",
-        "precio": "14000"
+        "precio": "18000"
       },
       {
         "plato": "Escorihuela Gascón",
@@ -187,7 +187,7 @@
       },
       {
         "plato": "Escorihuela Gascón 375ml",
-        "precio": "7000"
+        "precio": "10000"
       }
     ]
   },
@@ -224,7 +224,7 @@
       },
       {
         "plato": "Jack Daniel's",
-        "precio": "14000"
+        "precio": "18000"
       },
       {
         "plato": "Johnnie Walker Red",
