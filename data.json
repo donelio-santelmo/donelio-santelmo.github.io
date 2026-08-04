@@ -20,19 +20,19 @@
       },
       {
         "plato": "Cuadril",
-        "precio": "15000"
+        "precio": "18000"
       },
       {
         "plato": "Asado Banderita",
-        "precio": "15000"
+        "precio": "16000"
       },
       {
         "plato": "Vacío",
-        "precio": "17000"
+        "precio": "18000"
       },
       {
         "plato": "Parrillada",
-        "precio": "35000"
+        "precio": "39000"
       },
       {
         "plato": "Provoleta",
@@ -40,7 +40,7 @@
       },
       {
         "plato": "Matambre de cerdo",
-        "precio": "14000"
+        "precio": "16000"
       }
     ]
   },
