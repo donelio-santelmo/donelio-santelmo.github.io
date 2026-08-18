@@ -138,19 +138,19 @@
     "items": [
       {
         "plato": "Agua 500cc",
-        "precio": "3800"
+        "precio": "4000"
       },
       {
         "plato": "Agua Saborizada",
-        "precio": "4000"
+        "precio": "5000"
       },
       {
         "plato": "Gaseosa 600cc",
-        "precio": "4000"
+        "precio": "5000"
       },
       {
         "plato": "361 Lata",
-        "precio": "4000"
+        "precio": "5000"
       },
       {
         "plato": "Heineken 473ml",
@@ -233,61 +233,12 @@
     ]
   },
   "promos": {
-    "Lunes": [
-      {
-        "emoji": "🥩",
-        "titulo": "10% OFF en Milanesa",
-        "desc": "El lunes arranca bien: 10% de descuento en la Milanesa. Mostrá esta pantalla al pedir.",
-        "dish": "Milanesa con 10% OFF (promo lunes)"
-      }
-    ],
-    "Martes": [
-      {
-        "emoji": "🍷",
-        "titulo": "Copa de vino con tu corte",
-        "desc": "Pedí cualquier corte de parrilla y la copa de Privado Reserva va de la casa. Martes de vino.",
-        "dish": "Corte de parrilla + copa Privado Reserva de cortesía (promo martes)"
-      }
-    ],
-    "Miércoles": [
-      {
-        "emoji": "🐷",
-        "titulo": "Combo Bondiola + Gaseosa",
-        "desc": "El miércoles te salvamos el mediodía: Bondiola + Gaseosa a precio combo. Aprovechalo.",
-        "dish": "Combo Bondiola + Gaseosa precio especial (promo miércoles)"
-      }
-    ],
-    "Jueves": [
-      {
-        "emoji": "🍟",
-        "titulo": "Papas Fritas gratis con tu Vacío",
-        "desc": "Pedí el Vacío y las Papas Fritas van de regalo. Jueves de clásico completo.",
-        "dish": "Vacío + Papas Fritas de regalo (promo jueves)"
-      }
-    ],
-    "Viernes": [
-      {
-        "emoji": "🔥",
-        "titulo": "3x2 en Chorizos",
-        "desc": "Viernes de piqueo: pedís 3 Chorizos y pagás 2. Ideal para compartir entre amigos.",
-        "dish": "3x2 en Chorizos (promo viernes)"
-      }
-    ],
-    "Sábado": [
-      {
-        "emoji": "🥗",
-        "titulo": "Guarnición gratis con tu Asado",
-        "desc": "Con cualquier corte de parrilla, elegís una guarnición de la casa sin cargo. Sábado de asado completo.",
-        "dish": "Corte de parrilla + Guarnición de regalo (promo sábado)"
-      }
-    ],
-    "Domingo": [
-      {
-        "emoji": "🍮",
-        "titulo": "Postre de cortesía",
-        "desc": "Mesas de 3 o más personas reciben un postre de cortesía. Domingo en familia en Don Elio.",
-        "dish": "Postre de cortesía para mesas de 3 o más (promo domingo)"
-      }
-    ]
+    "Lunes": [],
+    "Martes": [],
+    "Miércoles": [],
+    "Jueves": [],
+    "Viernes": [],
+    "Sábado": [],
+    "Domingo": []
   }
 }
