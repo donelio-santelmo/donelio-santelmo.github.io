@@ -10,6 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
+  <script type="importmap">
+    { "imports": {
+        "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+      } }
+  </script>
+  <script type="module" src="corte3d.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -32,6 +40,9 @@
     ::-webkit-scrollbar-track { background: #1A1A1A; }
     ::-webkit-scrollbar-thumb { background: #FF4D00; border-radius: 3px; }
     .section-divider { height: 1px; background: linear-gradient(to right, transparent, #FF4D00, transparent); margin: 1.5rem 0; }
+    .lang-bar { display: flex; gap: 8px; justify-content: center; }
+    .lang-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #e2e8f0; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+    .lang-btn.active, .lang-btn:hover { background: #FF4D00; border-color: #FF4D00; color: #fff; }
   </style>
 </head>
 <body class="antialiased">
@@ -41,43 +52,186 @@
    class="fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-4 py-3 rounded-full shadow-xl transition-all"
    style="box-shadow: 0 0 20px rgba(34,197,94,0.4)">
   <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  <span>Hacer pedido</span>
+  <span id="float-wa-label">Hacer pedido</span>
 </a>
 
 <!-- HEADER -->
 <header class="pt-10 pb-6 px-4 text-center border-b border-smoke">
   <div class="text-3xl mb-1">🔥</div>
   <h1 class="fileteado text-4xl sm:text-5xl text-ember mb-1">Don Elio</h1>
-  <p class="text-gray-100 text-sm tracking-widest uppercase font-semibold mb-1">La Carta</p>
-  <p class="text-gray-300 text-xs">Parrilla · Chacabuco 454 · San Telmo · <span id="horario-carta">Lun–Vie 12:30–16 hs</span></p>
+  <p class="text-gray-100 text-sm tracking-widest uppercase font-semibold mb-3">La Carta</p>
+
+  <div class="lang-bar mb-3">
+    <button class="lang-btn active" data-lang="es" onclick="setLang('es')">🇦🇷 ES</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">🇺🇸 EN</button>
+    <button class="lang-btn" data-lang="pt" onclick="setLang('pt')">🇧🇷 PT</button>
+  </div>
+
+  <p class="text-gray-300 text-xs"><span id="subhead-text">Parrilla · Chacabuco 454 · San Telmo</span> · <span id="horario-carta">Lun–Vie 12:30–16 hs</span></p>
   <div class="section-divider max-w-xs mx-auto mt-4"></div>
-  <p class="text-gray-300 text-xs">Tocá cualquier plato para pedirlo por WhatsApp</p>
+  <p id="tap-hint" class="text-gray-300 text-xs">Tocá cualquier plato para pedirlo por WhatsApp</p>
 </header>
 
 <!-- CARTA -->
 <main class="max-w-3xl mx-auto px-4 py-8">
   <div id="menu-grid" class="grid sm:grid-cols-2 gap-4">
-    <div class="sm:col-span-2 text-center py-12 text-gray-400 text-sm">Cargando carta...</div>
+    <div id="menu-loading" class="sm:col-span-2 text-center py-12 text-gray-400 text-sm">Cargando carta...</div>
   </div>
 </main>
 
 <!-- FOOTER -->
 <footer class="border-t border-smoke py-8 px-4 text-center mt-4">
   <div class="fileteado text-ember text-xl mb-1">Don Elio</div>
-  <p class="text-gray-300 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
-  <a href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
+  <p id="footer-tag" class="text-gray-300 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
+  <a id="maps-link" href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
      class="inline-flex items-center gap-1 text-xs text-gray-300 hover:text-ember transition-colors mb-4">
     📍 Ver en Google Maps
   </a>
   <br/>
-  <a href="https://donelio-santelmo.github.io/" class="text-xs text-gray-400 hover:text-ember transition-colors">
+  <a id="full-page-link" href="https://donelio-santelmo.github.io/" class="text-xs text-gray-400 hover:text-ember transition-colors">
     ← Ver página completa
   </a>
-  <p class="text-gray-500 text-xs mt-4">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
+  <p id="footer-bottom" class="text-gray-500 text-xs mt-4">© 2026 Don Elio · Hecho con 🔥 en San Telmo</p>
 </footer>
 
 <script>
   const WA_NUMBER = '5491161162391';
+  let currentLang = 'es';
+  let lastData = null;
+
+  // Textos fijos de la interfaz (no vienen de data.json).
+  const UI = {
+    es: {
+      subhead: 'Parrilla · Chacabuco 454 · San Telmo',
+      tapHint: 'Tocá cualquier plato para pedirlo por WhatsApp',
+      loading: 'Cargando carta...',
+      error: 'Error al cargar la carta. Intentá de nuevo.',
+      floatBtn: 'Hacer pedido',
+      footerTag: 'Parrilla auténtica · Chacabuco 454 · San Telmo · CABA',
+      mapsLink: '📍 Ver en Google Maps',
+      fullPage: '← Ver página completa',
+      footerBottom: '© 2026 Don Elio · Hecho con 🔥 en San Telmo',
+      consultar: 'Consultar',
+      waOrder: (dish, price) => `Hola Don Elio! Me gustaría pedir: ${dish} (${price}). ¿Tienen lugar?`,
+      waGeneral: 'Hola Don Elio! Quiero hacer un pedido.',
+      corte3dHint: 'Arrastrá para girar · Pellizcá para hacer zoom',
+      corte3dWa: 'Pedir por WhatsApp',
+      corte3dClose: 'Cerrar',
+    },
+    en: {
+      subhead: 'Grill · Chacabuco 454 · San Telmo',
+      tapHint: 'Tap any dish to order it via WhatsApp',
+      loading: 'Loading menu...',
+      error: 'Error loading the menu. Please try again.',
+      floatBtn: 'Order now',
+      footerTag: 'Authentic Argentine grill · Chacabuco 454 · San Telmo · Buenos Aires',
+      mapsLink: '📍 Open in Google Maps',
+      fullPage: '← Back to full site',
+      footerBottom: '© 2026 Don Elio · Made with 🔥 in San Telmo',
+      consultar: 'Ask staff',
+      waOrder: (dish, price) => `Hi Don Elio! I'd like to order: ${dish} (${price}). Do you have a table?`,
+      waGeneral: 'Hi Don Elio! I would like to place an order.',
+      corte3dHint: 'Drag to rotate · Pinch to zoom',
+      corte3dWa: 'Order via WhatsApp',
+      corte3dClose: 'Close',
+    },
+    pt: {
+      subhead: 'Churrasco · Chacabuco 454 · San Telmo',
+      tapHint: 'Toque em qualquer prato para pedir pelo WhatsApp',
+      loading: 'Carregando cardápio...',
+      error: 'Erro ao carregar o cardápio. Tente novamente.',
+      floatBtn: 'Fazer pedido',
+      footerTag: 'Churrascaria autêntica · Chacabuco 454 · San Telmo · Buenos Aires',
+      mapsLink: '📍 Ver no Google Maps',
+      fullPage: '← Ver site completo',
+      footerBottom: '© 2026 Don Elio · Feito com 🔥 em San Telmo',
+      consultar: 'Consultar',
+      waOrder: (dish, price) => `Olá Don Elio! Gostaria de pedir: ${dish} (${price}). Vocês têm lugar?`,
+      waGeneral: 'Olá Don Elio! Quero fazer um pedido.',
+      corte3dHint: 'Arraste para girar · Belisque para zoom',
+      corte3dWa: 'Pedir pelo WhatsApp',
+      corte3dClose: 'Fechar',
+    },
+  };
+
+  // Traducción del horario, solo para los valores conocidos hoy en data.json.
+  // Si alguien cambia el horario desde el admin y no está en este mapa, se
+  // muestra el texto en español tal cual (fallback aceptado a propósito).
+  const HORARIO_TR = {
+    'Lun a Vie · 12:30 a 16:00 hs': { en: 'Mon–Fri · 12:30–4:00 PM', pt: 'Seg–Sex · 12:30–16:00h' },
+  };
+
+  // Traducción de todo lo que viene de data.json: labels de sección, notas
+  // y nombres de plato. Se busca por el texto original en español tal cual
+  // está en data.json; si un plato nuevo no está acá, se muestra en español
+  // (fallback aceptado — evita que la carta se rompa si el admin agrega un
+  // plato sin traducción todavía).
+  const TX = {
+    // Secciones
+    '🥩 Parrilla': { en: '🥩 Grill', pt: '🥩 Churrasco' },
+    '🍽️ Más...': { en: '🍽️ More...', pt: '🍽️ Mais...' },
+    '🍟 Para Acompañar': { en: '🍟 Sides', pt: '🍟 Acompanhamentos' },
+    '🍮 Postres': { en: '🍮 Desserts', pt: '🍮 Sobremesas' },
+    '💧🍺 Sin alcohol': { en: '💧🍺 Non-alcoholic', pt: '💧🍺 Sem álcool' },
+    '🍷 Vinos': { en: '🍷 Wines', pt: '🍷 Vinhos' },
+    '🥂 Aperitivos & Tragos': { en: '🥂 Aperitifs & Cocktails', pt: '🥂 Aperitivos & Drinks' },
+
+    // Notas de sección / de plato
+    'Todos incluyen guarnición · plato o sándwich': { en: 'All include a side · plate or sandwich', pt: 'Todos acompanham guarnição · prato ou sanduíche' },
+    'Zapallo, arvejas o zanahoria curry': { en: 'Pumpkin, pea, or curried carrot', pt: 'Abóbora, ervilha ou cenoura ao curry' },
+    'Filetto, crema o manteca de hierbas': { en: 'Tomato sauce, cream, or herb butter', pt: 'Molho de tomate, creme ou manteiga de ervas' },
+
+    // Parrilla
+    'Chorizo': { en: 'Chorizo (grilled pork sausage)', pt: 'Chorizo (linguiça grelhada)' },
+    'Pechuga': { en: 'Grilled Chicken Breast', pt: 'Peito de Frango Grelhado' },
+    'Bondiola': { en: 'Pork Shoulder', pt: 'Bondiola (Pernil Suíno)' },
+    'Cuadril': { en: 'Rump Steak', pt: 'Alcatra' },
+    'Asado Banderita': { en: 'Short Ribs "Banderita"', pt: 'Costela "Banderita"' },
+    'Vacío': { en: 'Flank Steak', pt: 'Vazio (Fraldinha)' },
+    'Parrillada': { en: 'Mixed Grill Platter (for sharing)', pt: 'Parrillada (Churrasco Misto)' },
+    'Provoleta': { en: 'Grilled Provolone Cheese', pt: 'Provolone Grelhado' },
+    'Matambre de cerdo': { en: 'Pork Flank Steak', pt: 'Matambre de Porco' },
+
+    // Más...
+    'Milanesa': { en: 'Breaded Cutlet', pt: 'Bife à Milanesa' },
+    'Sopa Crema Casera': { en: 'Homemade Cream Soup', pt: 'Sopa Creme Caseira' },
+    'Rabas': { en: 'Fried Calamari', pt: 'Lulas Fritas' },
+    'Pastel de Carne': { en: 'Meat Pie', pt: 'Torta de Carne' },
+    'Guiso de Lentejas': { en: 'Lentil Stew', pt: 'Ensopado de Lentilha' },
+    'Tallarines / Ravioles': { en: 'Tagliatelle / Ravioli', pt: 'Talharim / Ravióli' },
+
+    // Para acompañar
+    'Ensalada': { en: 'Salad', pt: 'Salada' },
+    'Papas Fritas': { en: 'French Fries', pt: 'Batata Frita' },
+    'Puré / Papas al Romero': { en: 'Mashed Potatoes / Rosemary Potatoes', pt: 'Purê / Batatas ao Alecrim' },
+
+    // Postres
+    'Tiramisú': { en: 'Tiramisu', pt: 'Tiramisù' },
+    'Bombón Escocés': { en: 'Scotch-style Bonbon', pt: 'Bombom Escocês' },
+    'Budín de Pan': { en: 'Bread Pudding', pt: 'Pudim de Pão' },
+    'Flan': { en: 'Caramel Flan', pt: 'Pudim de Leite (Flan)' },
+    'Arroz con Leche': { en: 'Rice Pudding', pt: 'Arroz Doce' },
+    'Queso y Dulce': { en: 'Cheese & Quince Paste', pt: 'Queijo com Doce de Marmelo' },
+    'Té': { en: 'Tea', pt: 'Chá' },
+
+    // Sin alcohol
+    'Gaseosa 600cc': { en: 'Soda 600cc', pt: 'Refrigerante 600cc' },
+    'Quilmes Cristal / Stout / Stella': { en: 'Quilmes Cristal / Stout / Stella (beer)', pt: 'Quilmes Cristal / Stout / Stella (cerveja)' },
+
+    // Aperitivos & Tragos
+    'Fernet ×2': { en: 'Fernet ×2 (2 shots)', pt: 'Fernet ×2 (2 doses)' },
+    'Vermut': { en: 'Vermouth', pt: 'Vermute' },
+  };
+
+  function tr(s) {
+    if (currentLang === 'es' || !s) return s;
+    return (TX[s] && TX[s][currentLang]) || s;
+  }
+
+  function trHorario(s) {
+    if (currentLang === 'es' || !s) return s;
+    return (HORARIO_TR[s] && HORARIO_TR[s][currentLang]) || s;
+  }
 
   function waLink(msg) {
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
@@ -92,64 +246,79 @@
     return '$' + parseInt(p).toLocaleString('de-DE');
   }
 
-  function renderItems(items) {
+  function renderItems(items, isCorte) {
     return items.map(item => {
       const fmt = fmtPrecio(item.precio);
-      const waPrice = fmt || 'Consultar';
+      const consultarLabel = UI[currentLang].consultar;
+      const waPrice = fmt || consultarLabel;
       const precioHTML = fmt
         ? `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-gray-200">${fmt}</span>`
-        : `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-ember text-xs font-semibold">Consultar</span>`;
+        : `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-ember text-xs font-semibold">${consultarLabel}</span>`;
+      const cutBadge = isCorte
+        ? ` <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-ember border border-ember/50 rounded-full px-1.5 py-0.5 align-middle">🔄 3D</span>`
+        : '';
       const nameHTML = item.nota
-        ? `<span class="flex flex-col"><span>${item.plato}</span><span class="text-gray-300 text-xs">${item.nota}</span></span>`
-        : `<span>${item.plato}</span>`;
+        ? `<span class="flex flex-col"><span>${tr(item.plato)}${cutBadge}</span><span class="text-gray-300 text-xs">${tr(item.nota)}</span></span>`
+        : `<span>${tr(item.plato)}${cutBadge}</span>`;
       const align = item.nota ? ' items-start' : '';
       return `<li class="menu-item flex justify-between${align} cursor-pointer hover:text-ember transition-colors"
-                  data-dish="${item.plato}" data-price="${waPrice}">
+                  data-dish="${item.plato}" data-price="${waPrice}"${isCorte ? ' data-cut="1"' : ''}>
                 ${nameHTML}${precioHTML}
               </li>`;
     }).join('');
   }
 
   function renderMenu(d) {
+    lastData = d;
     document.getElementById('menu-grid').innerHTML = `
       <div class="reveal bg-ash border border-smoke rounded-xl p-5">
-        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${d.parrilla.label}</h2>
-        <p class="text-gray-300 text-xs italic mb-3">${d.parrilla.nota}</p>
-        <ul class="space-y-2 text-sm">${renderItems(d.parrilla.items)}</ul>
+        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${tr(d.parrilla.label)}</h2>
+        <p class="text-gray-300 text-xs italic mb-3">${tr(d.parrilla.nota)}</p>
+        <ul class="space-y-2 text-sm">${renderItems(d.parrilla.items, true)}</ul>
       </div>
 
       <div class="reveal bg-ash border border-smoke rounded-xl p-5">
-        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.mas.label}</h2>
+        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.mas.label)}</h2>
         <ul class="space-y-2 text-sm">${renderItems(d.mas.items)}</ul>
       </div>
 
       <div class="reveal bg-ash border border-smoke rounded-xl p-5">
-        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.acompanamiento.label}</h2>
+        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.acompanamiento.label)}</h2>
         <ul class="space-y-2 text-sm mb-4">${renderItems(d.acompanamiento.items)}</ul>
         <div class="border-t border-smoke/60 pt-3">
-          <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.postres.label}</h2>
+          <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.postres.label)}</h2>
           <ul class="space-y-2 text-sm">${renderItems(d.postres.items)}</ul>
         </div>
       </div>
 
       <div class="reveal bg-ash border border-smoke rounded-xl p-5">
-        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.bebidas.label}</h2>
+        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.bebidas.label)}</h2>
         <ul class="space-y-2 text-sm mb-4">${renderItems(d.bebidas.items)}</ul>
         <div class="border-t border-smoke/60 pt-3">
-          <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.vinos.label}</h2>
+          <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.vinos.label)}</h2>
           <ul class="space-y-2 text-sm">${renderItems(d.vinos.items)}</ul>
         </div>
       </div>
 
       <div class="reveal bg-ash border border-smoke rounded-xl p-5 sm:col-span-2">
-        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.aperitivos.label}</h2>
+        <h2 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.aperitivos.label)}</h2>
         <ul class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">${renderItems(d.aperitivos.items)}</ul>
       </div>
     `;
 
     document.querySelectorAll('.menu-item').forEach(item => {
       item.addEventListener('click', () => {
-        window.open(waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`), '_blank');
+        const dishLabel = tr(item.dataset.dish);
+        const href = waLink(UI[currentLang].waOrder(dishLabel, item.dataset.price));
+        if (item.dataset.cut === '1' && window.CorteViewer) {
+          window.CorteViewer.open(dishLabel, href, {
+            hint: UI[currentLang].corte3dHint,
+            waLabel: UI[currentLang].corte3dWa,
+            closeLabel: UI[currentLang].corte3dClose,
+          });
+        } else {
+          window.open(href, '_blank');
+        }
       });
     });
 
@@ -160,17 +329,49 @@
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   }
 
-  document.getElementById('float-wa').href = waLink('Hola Don Elio! Quiero hacer un pedido.');
+  function applyStaticUI() {
+    const t = UI[currentLang];
+    document.getElementById('subhead-text').textContent = t.subhead;
+    document.getElementById('tap-hint').textContent = t.tapHint;
+    document.getElementById('float-wa-label').textContent = t.floatBtn;
+    document.getElementById('footer-tag').textContent = t.footerTag;
+    document.getElementById('maps-link').textContent = t.mapsLink;
+    document.getElementById('full-page-link').textContent = t.fullPage;
+    document.getElementById('footer-bottom').textContent = t.footerBottom;
+    document.getElementById('float-wa').href = waLink(t.waGeneral);
+    const loading = document.getElementById('menu-loading');
+    if (loading) loading.textContent = t.loading;
+    if (lastData?.config?.horario) {
+      document.getElementById('horario-carta').textContent = trHorario(lastData.config.horario);
+    }
+  }
+
+  function setLang(lang) {
+    if (!UI[lang]) return;
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    applyStaticUI();
+    if (lastData) renderMenu(lastData);
+    try { localStorage.setItem('donelio-lang', lang); } catch (e) {}
+  }
+  window.setLang = setLang;
+
+  try {
+    const saved = localStorage.getItem('donelio-lang');
+    if (saved && UI[saved]) currentLang = saved;
+  } catch (e) {}
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+  applyStaticUI();
 
   fetch('data.json?v=' + Date.now())
     .then(r => r.json())
     .then(d => {
-      if (d.config?.horario) document.getElementById('horario-carta').textContent = d.config.horario;
       renderMenu(d);
+      applyStaticUI();
     })
     .catch(() => {
       document.getElementById('menu-grid').innerHTML =
-        '<div class="sm:col-span-2 text-center py-8 text-gray-400 text-sm">Error al cargar la carta. Intentá de nuevo.</div>';
+        `<div class="sm:col-span-2 text-center py-8 text-gray-400 text-sm">${UI[currentLang].error}</div>`;
     });
 </script>
 </body>

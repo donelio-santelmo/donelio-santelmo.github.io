@@ -10,6 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
+  <script type="importmap">
+    { "imports": {
+        "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+      } }
+  </script>
+  <script type="module" src="corte3d.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -325,7 +333,7 @@
     return '$' + parseInt(p).toLocaleString('de-DE');
   }
 
-  function renderItems(items) {
+  function renderItems(items, isCorte) {
     return items.map(item => {
       const fmt = fmtPrecio(item.precio);
       const waPrice = fmt || 'Consultar';
@@ -336,7 +344,7 @@
         ? `<span class="flex flex-col"><span>${item.plato}</span><span class="text-gray-300 text-xs">${item.nota}</span></span>`
         : `<span>${item.plato}</span>`;
       const align = item.nota ? ' items-start' : '';
-      return `<li class="menu-item flex justify-between${align} cursor-pointer hover:text-ember transition-colors" data-dish="${item.plato}" data-price="${waPrice}">${nameHTML}${precioHTML}</li>`;
+      return `<li class="menu-item flex justify-between${align} cursor-pointer hover:text-ember transition-colors" data-dish="${item.plato}" data-price="${waPrice}"${isCorte ? ' data-cut="1"' : ''}>${nameHTML}${precioHTML}</li>`;
     }).join('');
   }
 
@@ -346,7 +354,7 @@
           <div class="bg-ash border border-smoke rounded-xl p-5">
             <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${d.parrilla.label}</h3>
             <p class="text-gray-300 text-xs italic mb-3">${d.parrilla.nota}</p>
-            <ul class="space-y-2 text-sm">${renderItems(d.parrilla.items)}</ul>
+            <ul class="space-y-2 text-sm">${renderItems(d.parrilla.items, true)}</ul>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
             <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.mas.label}</h3>
@@ -374,7 +382,12 @@
           </div>`;
         document.querySelectorAll('.menu-item').forEach(item => {
           item.addEventListener('click', () => {
-            window.open(waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`), '_blank');
+            const href = waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`);
+            if (item.dataset.cut === '1' && window.CorteViewer) {
+              window.CorteViewer.open(item.dataset.dish, href);
+            } else {
+              window.open(href, '_blank');
+            }
           });
         });
     }
