@@ -56,6 +56,10 @@
     .slot-reel { display: flex; flex-direction: column; }
     .slot-item { height: 2.5rem; display: flex; align-items: center; justify-content: center; white-space: nowrap; font-weight: 600; }
 
+    .lang-bar { display: flex; gap: 8px; justify-content: center; }
+    .lang-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #e2e8f0; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+    .lang-btn.active, .lang-btn:hover { background: #FF4D00; border-color: #FF4D00; color: #fff; }
+
     #fire-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
     nav, header, section, footer { position: relative; z-index: 1; }
 
@@ -136,12 +140,18 @@
 <section id="menu" class="py-12 px-4 reveal">
   <div class="max-w-3xl mx-auto">
     <p class="text-ember text-xs font-bold tracking-widest uppercase mb-1 text-center">A las brasas</p>
-    <h2 class="fileteado text-3xl sm:text-4xl text-white text-center mb-6">Nuestra Carta</h2>
+    <h2 class="fileteado text-3xl sm:text-4xl text-white text-center mb-3">Nuestra Carta</h2>
+
+    <div class="lang-bar mb-6">
+      <button class="lang-btn active" data-lang="es" onclick="setMenuLang('es')">🇦🇷 ES</button>
+      <button class="lang-btn" data-lang="en" onclick="setMenuLang('en')">🇺🇸 EN</button>
+      <button class="lang-btn" data-lang="pt" onclick="setMenuLang('pt')">🇧🇷 PT</button>
+    </div>
 
     <div id="menu-grid" class="grid sm:grid-cols-2 gap-4">
       <div class="sm:col-span-2 text-center py-10 text-gray-400 text-sm">Cargando carta...</div>
     </div>
-    <p class="text-center text-gray-300 text-xs mt-4">Tocá cualquier plato para pedirlo por WhatsApp</p>
+    <p id="menu-tap-hint" class="text-center text-gray-300 text-xs mt-4">Tocá cualquier plato para pedirlo por WhatsApp</p>
   </div>
 </section>
 
@@ -252,7 +262,107 @@
 
 <script>
   const WA_NUMBER = '5491161162391';
+  let currentLang = 'es';
+  let lastMenuData = null;
 
+  // Textos fijos de la carta embebida en la home (subset de los de carta.html).
+  const UI = {
+    es: {
+      tapHint: 'Tocá cualquier plato para pedirlo por WhatsApp',
+      loading: 'Cargando carta...',
+      consultar: 'Consultar',
+      waOrder: (dish, price) => `Hola Don Elio! Me gustaría pedir: ${dish} (${price}). ¿Tienen lugar?`,
+      corte3dHint: 'Arrastrá para girar · Pellizcá para hacer zoom',
+      corte3dWa: 'Pedir por WhatsApp',
+      corte3dClose: 'Cerrar',
+    },
+    en: {
+      tapHint: 'Tap any dish to order it via WhatsApp',
+      loading: 'Loading menu...',
+      consultar: 'Ask staff',
+      waOrder: (dish, price) => `Hi Don Elio! I'd like to order: ${dish} (${price}). Do you have a table?`,
+      corte3dHint: 'Drag to rotate · Pinch to zoom',
+      corte3dWa: 'Order via WhatsApp',
+      corte3dClose: 'Close',
+    },
+    pt: {
+      tapHint: 'Toque em qualquer prato para pedir pelo WhatsApp',
+      loading: 'Carregando cardápio...',
+      consultar: 'Consultar',
+      waOrder: (dish, price) => `Olá Don Elio! Gostaria de pedir: ${dish} (${price}). Vocês têm lugar?`,
+      corte3dHint: 'Arraste para girar · Belisque para zoom',
+      corte3dWa: 'Pedir pelo WhatsApp',
+      corte3dClose: 'Fechar',
+    },
+  };
+
+  // Traducción de labels/notas/platos que vienen de data.json — mismo diccionario que carta.html.
+  const TX = {
+    '🥩 Parrilla': { en: '🥩 Grill', pt: '🥩 Churrasco' },
+    '🍽️ Más...': { en: '🍽️ More...', pt: '🍽️ Mais...' },
+    '🍟 Para Acompañar': { en: '🍟 Sides', pt: '🍟 Acompanhamentos' },
+    '🍮 Postres': { en: '🍮 Desserts', pt: '🍮 Sobremesas' },
+    '💧🍺 Sin alcohol': { en: '💧🍺 Non-alcoholic', pt: '💧🍺 Sem álcool' },
+    '🍷 Vinos': { en: '🍷 Wines', pt: '🍷 Vinhos' },
+    '🥂 Aperitivos & Tragos': { en: '🥂 Aperitifs & Cocktails', pt: '🥂 Aperitivos & Drinks' },
+
+    'Todos incluyen guarnición · plato o sándwich': { en: 'All include a side · plate or sandwich', pt: 'Todos acompanham guarnição · prato ou sanduíche' },
+    'Zapallo, arvejas o zanahoria curry': { en: 'Pumpkin, pea, or curried carrot', pt: 'Abóbora, ervilha ou cenoura ao curry' },
+    'Filetto, crema o manteca de hierbas': { en: 'Tomato sauce, cream, or herb butter', pt: 'Molho de tomate, creme ou manteiga de ervas' },
+
+    'Chorizo': { en: 'Chorizo (grilled pork sausage)', pt: 'Chorizo (linguiça grelhada)' },
+    'Pechuga': { en: 'Grilled Chicken Breast', pt: 'Peito de Frango Grelhado' },
+    'Bondiola': { en: 'Pork Shoulder', pt: 'Bondiola (Pernil Suíno)' },
+    'Cuadril': { en: 'Rump Steak', pt: 'Alcatra' },
+    'Asado Banderita': { en: 'Short Ribs "Banderita"', pt: 'Costela "Banderita"' },
+    'Vacío': { en: 'Flank Steak', pt: 'Vazio (Fraldinha)' },
+    'Parrillada': { en: 'Mixed Grill Platter (for sharing)', pt: 'Parrillada (Churrasco Misto)' },
+    'Provoleta': { en: 'Grilled Provolone Cheese', pt: 'Provolone Grelhado' },
+    'Matambre de cerdo': { en: 'Pork Flank Steak', pt: 'Matambre de Porco' },
+
+    'Milanesa': { en: 'Breaded Cutlet', pt: 'Bife à Milanesa' },
+    'Sopa Crema Casera': { en: 'Homemade Cream Soup', pt: 'Sopa Creme Caseira' },
+    'Rabas': { en: 'Fried Calamari', pt: 'Lulas Fritas' },
+    'Pastel de Carne': { en: 'Meat Pie', pt: 'Torta de Carne' },
+    'Guiso de Lentejas': { en: 'Lentil Stew', pt: 'Ensopado de Lentilha' },
+    'Tallarines / Ravioles': { en: 'Tagliatelle / Ravioli', pt: 'Talharim / Ravióli' },
+
+    'Ensalada': { en: 'Salad', pt: 'Salada' },
+    'Papas Fritas': { en: 'French Fries', pt: 'Batata Frita' },
+    'Puré / Papas al Romero': { en: 'Mashed Potatoes / Rosemary Potatoes', pt: 'Purê / Batatas ao Alecrim' },
+
+    'Tiramisú': { en: 'Tiramisu', pt: 'Tiramisù' },
+    'Bombón Escocés': { en: 'Scotch-style Bonbon', pt: 'Bombom Escocês' },
+    'Budín de Pan': { en: 'Bread Pudding', pt: 'Pudim de Pão' },
+    'Flan': { en: 'Caramel Flan', pt: 'Pudim de Leite (Flan)' },
+    'Arroz con Leche': { en: 'Rice Pudding', pt: 'Arroz Doce' },
+    'Queso y Dulce': { en: 'Cheese & Quince Paste', pt: 'Queijo com Doce de Marmelo' },
+    'Té': { en: 'Tea', pt: 'Chá' },
+
+    'Gaseosa 600cc': { en: 'Soda 600cc', pt: 'Refrigerante 600cc' },
+    'Quilmes Cristal / Stout / Stella': { en: 'Quilmes Cristal / Stout / Stella (beer)', pt: 'Quilmes Cristal / Stout / Stella (cerveja)' },
+
+    'Fernet ×2': { en: 'Fernet ×2 (2 shots)', pt: 'Fernet ×2 (2 doses)' },
+    'Vermut': { en: 'Vermouth', pt: 'Vermute' },
+  };
+
+  // Mismas fotos de stock que carta.html, usadas de placeholder en el visor 3D.
+  const CORTE_IMAGES = {
+    'Chorizo': 'https://images.unsplash.com/photo-1495988840227-a5986a3be9fc?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Pechuga': 'https://images.unsplash.com/photo-1682991136736-a2b44623eeba?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Bondiola': 'https://images.unsplash.com/photo-1695088224287-bb10a886fce4?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Cuadril': 'https://images.unsplash.com/photo-1753440343939-13984b0e9aa7?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Asado Banderita': 'https://images.unsplash.com/photo-1565299524732-d2149c7eabf5?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Vacío': 'https://images.unsplash.com/photo-1690983321402-35ff91692b56?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Parrillada': 'https://images.unsplash.com/photo-1774668748614-f188f5b61535?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Provoleta': 'https://images.unsplash.com/photo-1661349008073-136bed6e6788?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Matambre de cerdo': 'https://images.unsplash.com/photo-1690983325563-fe4412c4c347?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+  };
+
+  function tr(s) {
+    if (currentLang === 'es' || !s) return s;
+    return (TX[s] && TX[s][currentLang]) || s;
+  }
 
   const COMBOS = [
     { plato: 'Vacío + Papas Fritas',           extra: '+ Gaseosa incluida' },
@@ -336,55 +446,66 @@
   function renderItems(items, isCorte) {
     return items.map(item => {
       const fmt = fmtPrecio(item.precio);
-      const waPrice = fmt || 'Consultar';
+      const consultarLabel = UI[currentLang].consultar;
+      const waPrice = fmt || consultarLabel;
       const precioHTML = fmt
         ? `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-gray-200">${fmt}</span>`
-        : `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-ember text-xs font-semibold">Consultar</span>`;
+        : `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-ember text-xs font-semibold">${consultarLabel}</span>`;
+      const cutBadge = isCorte
+        ? ` <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-ember border border-ember/50 rounded-full px-1.5 py-0.5 align-middle">🔄 3D</span>`
+        : '';
       const nameHTML = item.nota
-        ? `<span class="flex flex-col"><span>${item.plato}</span><span class="text-gray-300 text-xs">${item.nota}</span></span>`
-        : `<span>${item.plato}</span>`;
+        ? `<span class="flex flex-col"><span>${tr(item.plato)}${cutBadge}</span><span class="text-gray-300 text-xs">${tr(item.nota)}</span></span>`
+        : `<span>${tr(item.plato)}${cutBadge}</span>`;
       const align = item.nota ? ' items-start' : '';
       return `<li class="menu-item flex justify-between${align} cursor-pointer hover:text-ember transition-colors" data-dish="${item.plato}" data-price="${waPrice}"${isCorte ? ' data-cut="1"' : ''}>${nameHTML}${precioHTML}</li>`;
     }).join('');
   }
 
   function loadMenuFromData(d) {
+    lastMenuData = d;
     {
         document.getElementById('menu-grid').innerHTML = `
           <div class="bg-ash border border-smoke rounded-xl p-5">
-            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${d.parrilla.label}</h3>
-            <p class="text-gray-300 text-xs italic mb-3">${d.parrilla.nota}</p>
+            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-1">${tr(d.parrilla.label)}</h3>
+            <p class="text-gray-300 text-xs italic mb-3">${tr(d.parrilla.nota)}</p>
             <ul class="space-y-2 text-sm">${renderItems(d.parrilla.items, true)}</ul>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
-            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.mas.label}</h3>
+            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.mas.label)}</h3>
             <ul class="space-y-2 text-sm">${renderItems(d.mas.items)}</ul>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
-            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.acompanamiento.label}</h3>
+            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.acompanamiento.label)}</h3>
             <ul class="space-y-2 text-sm mb-4">${renderItems(d.acompanamiento.items)}</ul>
             <div class="border-t border-smoke/60 pt-3">
-              <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.postres.label}</h3>
+              <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.postres.label)}</h3>
               <ul class="space-y-2 text-sm">${renderItems(d.postres.items)}</ul>
             </div>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
-            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.bebidas.label}</h3>
+            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.bebidas.label)}</h3>
             <ul class="space-y-2 text-sm mb-4">${renderItems(d.bebidas.items)}</ul>
             <div class="border-t border-smoke/60 pt-3">
-              <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.vinos.label}</h3>
+              <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.vinos.label)}</h3>
               <ul class="space-y-2 text-sm">${renderItems(d.vinos.items)}</ul>
             </div>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5 sm:col-span-2">
-            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${d.aperitivos.label}</h3>
+            <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.aperitivos.label)}</h3>
             <ul class="grid sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">${renderItems(d.aperitivos.items)}</ul>
           </div>`;
         document.querySelectorAll('.menu-item').forEach(item => {
           item.addEventListener('click', () => {
-            const href = waLink(`Hola Don Elio! Me gustaría pedir: ${item.dataset.dish} (${item.dataset.price}). ¿Tienen lugar?`);
+            const dishLabel = tr(item.dataset.dish);
+            const href = waLink(UI[currentLang].waOrder(dishLabel, item.dataset.price));
             if (item.dataset.cut === '1' && window.CorteViewer) {
-              window.CorteViewer.open(item.dataset.dish, href);
+              window.CorteViewer.open(dishLabel, href, {
+                hint: UI[currentLang].corte3dHint,
+                waLabel: UI[currentLang].corte3dWa,
+                closeLabel: UI[currentLang].corte3dClose,
+                imageUrl: CORTE_IMAGES[item.dataset.dish],
+              });
             } else {
               window.open(href, '_blank');
             }
@@ -392,6 +513,27 @@
         });
     }
   }
+
+  function applyMenuLangUI() {
+    document.getElementById('menu-tap-hint').textContent = UI[currentLang].tapHint;
+    const loading = document.querySelector('#menu-grid .sm\\:col-span-2');
+    if (loading && !lastMenuData) loading.textContent = UI[currentLang].loading;
+  }
+
+  function setMenuLang(lang) {
+    if (!UI[lang]) return;
+    currentLang = lang;
+    document.querySelectorAll('#menu .lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    applyMenuLangUI();
+    if (lastMenuData) loadMenuFromData(lastMenuData);
+    try { localStorage.setItem('donelio-lang', lang); } catch (e) {}
+  }
+  window.setMenuLang = setMenuLang;
+
+  try {
+    const savedLang = localStorage.getItem('donelio-lang');
+    if (savedLang && UI[savedLang]) currentLang = savedLang;
+  } catch (e) {}
 
   // Slot machine
   let spinTimer = null;
@@ -537,6 +679,8 @@
     updateRoastTracker();
     setInterval(updateRoastTracker, 60000);
     initReveal();
+    document.querySelectorAll('#menu .lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+    applyMenuLangUI();
     fetch('data.json?v=' + Date.now())
       .then(r => r.json())
       .then(d => { loadPromo(d); loadMenuFromData(d); });
