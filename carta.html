@@ -237,6 +237,20 @@
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
+  // Fotos de stock (Unsplash, licencia libre) usadas de placeholder en el visor 3D
+  // hasta reemplazarlas por fotos propias de cada corte.
+  const CORTE_IMAGES = {
+    'Chorizo': 'https://images.unsplash.com/photo-1495988840227-a5986a3be9fc?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Pechuga': 'https://images.unsplash.com/photo-1682991136736-a2b44623eeba?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Bondiola': 'https://images.unsplash.com/photo-1695088224287-bb10a886fce4?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Cuadril': 'https://images.unsplash.com/photo-1753440343939-13984b0e9aa7?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Asado Banderita': 'https://images.unsplash.com/photo-1565299524732-d2149c7eabf5?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Vacío': 'https://images.unsplash.com/photo-1690983321402-35ff91692b56?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Parrillada': 'https://images.unsplash.com/photo-1774668748614-f188f5b61535?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Provoleta': 'https://images.unsplash.com/photo-1661349008073-136bed6e6788?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Matambre de cerdo': 'https://images.unsplash.com/photo-1690983325563-fe4412c4c347?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+  };
+
   function fmtPrecio(p) {
     if (p === 'consultar') return null;
     if (p.includes('-')) {
@@ -315,6 +329,7 @@
             hint: UI[currentLang].corte3dHint,
             waLabel: UI[currentLang].corte3dWa,
             closeLabel: UI[currentLang].corte3dClose,
+            imageUrl: CORTE_IMAGES[item.dataset.dish],
           });
         } else {
           window.open(href, '_blank');

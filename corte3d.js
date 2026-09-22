@@ -1,12 +1,16 @@
-// Visor 3D genérico de "corte de carne" — se abre al tocar cualquier plato
-// de la sección Parrilla. No usa modelos .glb (no tenemos assets reales por
-// corte): la geometría, el marmoleado y la iluminación se generan en código
-// con Three.js. Un solo modelo sirve para todos los cortes.
+// Visor 3D de "corte de carne" — se abre al tocar un plato de la Parrilla.
+// Si el plato tiene foto (CORTE_IMAGES en carta.html) se arma un relieve 3D
+// a partir de esa foto real (textura + bump por luminancia) que se puede
+// inclinar con el dedo, simulando profundidad. Si no hay foto, cae al
+// modelo genérico de carne generado por código (sin fotos reales).
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 let scene, camera, renderer, controls, mesh, container, resizeObs;
 let ready = false;
+let idleT = 0;
+let idleActive = true;
+const imgCache = new Map();
 
 function buildMarbledTexture() {
   const size = 512;
@@ -79,7 +83,95 @@ function buildMeatMesh() {
 
   const m = new THREE.Mesh(geo, mat);
   m.scale.set(1.55, 0.6, 1.05);
+  m.userData.kind = 'procedural';
   return m;
+}
+
+function loadImage(url) {
+  if (imgCache.has(url)) return imgCache.get(url);
+  const p = new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+  imgCache.set(url, p);
+  return p;
+}
+
+function buildPhotoMesh(img) {
+  const aspect = img.naturalWidth / img.naturalHeight;
+  const w = 1.9;
+  const h = w / aspect;
+  const segX = 90;
+  const segY = Math.max(20, Math.round(segX / aspect));
+  const geo = new THREE.PlaneGeometry(w, h, segX, segY);
+
+  const sw = segX + 1;
+  const sh = segY + 1;
+  const off = document.createElement('canvas');
+  off.width = sw;
+  off.height = sh;
+  const octx = off.getContext('2d');
+  octx.drawImage(img, 0, 0, sw, sh);
+  const data = octx.getImageData(0, 0, sw, sh).data;
+
+  const pos = geo.attributes.position;
+  const amp = 0.16;
+  for (let iy = 0; iy < sh; iy++) {
+    for (let ix = 0; ix < sw; ix++) {
+      const i = (iy * sw + ix) * 4;
+      const lum = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114) / 255;
+      pos.setZ(iy * sw + ix, (lum - 0.5) * amp);
+    }
+  }
+  geo.computeVertexNormals();
+
+  const texture = new THREE.Texture(img);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 8;
+  texture.needsUpdate = true;
+
+  const mat = new THREE.MeshPhysicalMaterial({
+    map: texture,
+    roughness: 0.5,
+    metalness: 0.03,
+    clearcoat: 0.35,
+    clearcoatRoughness: 0.4,
+  });
+
+  const m = new THREE.Mesh(geo, mat);
+  m.userData.kind = 'photo';
+  return m;
+}
+
+function disposeMesh(m) {
+  if (!m) return;
+  scene.remove(m);
+  m.geometry.dispose();
+  if (m.material.map) m.material.map.dispose();
+  m.material.dispose();
+}
+
+function setMesh(newMesh) {
+  disposeMesh(mesh);
+  mesh = newMesh;
+  scene.add(mesh);
+  resetView();
+}
+
+function resetView() {
+  const isPhoto = mesh.userData.kind === 'photo';
+  controls.minAzimuthAngle = isPhoto ? -0.65 : -Infinity;
+  controls.maxAzimuthAngle = isPhoto ? 0.65 : Infinity;
+  controls.minPolarAngle = isPhoto ? Math.PI / 2 - 0.45 : 0;
+  controls.maxPolarAngle = isPhoto ? Math.PI / 2 + 0.35 : Math.PI;
+  camera.position.set(0, isPhoto ? 0.05 : 0.85, isPhoto ? 2.5 : 3.1);
+  controls.target.set(0, 0, 0);
+  controls.update();
+  idleT = 0;
+  idleActive = true;
 }
 
 function resize() {
@@ -125,18 +217,27 @@ function init(containerEl) {
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = false;
-  controls.minDistance = 1.8;
+  controls.minDistance = 1.6;
   controls.maxDistance = 5;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 2.2;
   controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_ROTATE };
-  controls.addEventListener('start', () => { controls.autoRotate = false; });
+  controls.addEventListener('start', () => { idleActive = false; });
 
   resizeObs = new ResizeObserver(resize);
   resizeObs.observe(container);
   resize();
 
   renderer.setAnimationLoop(() => {
+    if (idleActive && mesh) {
+      idleT += 0.01;
+      const isPhoto = mesh.userData.kind === 'photo';
+      const swing = isPhoto ? 0.4 : Math.PI;
+      const spherical = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+      spherical.theta = Math.sin(idleT) * swing;
+      if (isPhoto) spherical.phi = Math.PI / 2 + Math.sin(idleT * 0.7) * 0.15;
+      const p = new THREE.Vector3().setFromSpherical(spherical).add(controls.target);
+      camera.position.copy(p);
+      camera.lookAt(controls.target);
+    }
     controls.update();
     renderer.render(scene, camera);
   });
@@ -179,7 +280,16 @@ function open(dishName, waHref, opts) {
   const host = document.getElementById('corte3d-canvas');
   if (!ready) init(host);
   requestAnimationFrame(resize);
-  if (controls) controls.autoRotate = true;
+
+  if (opts.imageUrl) {
+    loadImage(opts.imageUrl)
+      .then((img) => setMesh(buildPhotoMesh(img)))
+      .catch(() => setMesh(buildMeatMesh()));
+  } else if (mesh.userData.kind !== 'procedural') {
+    setMesh(buildMeatMesh());
+  } else {
+    resetView();
+  }
 }
 
 function close() {
