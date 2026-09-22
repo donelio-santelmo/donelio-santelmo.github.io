@@ -31,13 +31,16 @@
 
   <style>
     html { scroll-behavior: smooth; }
-    body {
-      background-color: #0D0D0D; color: #F0F0F0; font-family: 'Inter', sans-serif; font-size: 15px;
+    body { background-color: #0D0D0D; color: #F0F0F0; font-family: 'Inter', sans-serif; font-size: 15px; }
+    #bg-logo {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       background-image: url('logo-watermark.png');
       background-repeat: no-repeat;
       background-position: center center;
       background-size: min(130vw, 1000px);
-      background-attachment: fixed;
+      pointer-events: none;
     }
     .fileteado { font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em; line-height: 1.05; }
     .ember-glow:hover { box-shadow: 0 0 18px rgba(255,77,0,0.4); }
@@ -53,6 +56,8 @@
   </style>
 </head>
 <body class="antialiased">
+
+<div id="bg-logo" aria-hidden="true"></div>
 
 <!-- WHATSAPP FLOTANTE -->
 <a id="float-wa" href="#"
@@ -87,7 +92,6 @@
 
 <!-- FOOTER -->
 <footer class="border-t border-smoke py-8 px-4 text-center mt-4">
-  <img src="logo.png" alt="Don Elio" class="h-14 w-14 rounded-full object-cover mx-auto mb-2" />
   <p id="footer-tag" class="text-gray-300 text-xs mb-3">Parrilla auténtica · Chacabuco 454 · San Telmo · CABA</p>
   <a id="maps-link" href="https://maps.google.com/?q=Chacabuco+454+San+Telmo+Buenos+Aires" target="_blank"
      class="inline-flex items-center gap-1 text-xs text-gray-300 hover:text-ember transition-colors mb-4">
