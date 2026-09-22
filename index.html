@@ -39,7 +39,14 @@
 
   <style>
     html { scroll-behavior: smooth; }
-    body { background-color: #0D0D0D; color: #F0F0F0; font-family: 'Inter', sans-serif; font-size: 15px; }
+    body {
+      background-color: #0D0D0D; color: #F0F0F0; font-family: 'Inter', sans-serif; font-size: 15px;
+      background-image: url('logo-watermark.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: min(130vw, 1000px);
+      background-attachment: fixed;
+    }
     .bg-ash  { background-color: rgba(22, 22, 22, 0.92) !important; }
     .bg-smoke { background-color: rgba(36, 36, 36, 0.95) !important; }
 
@@ -99,7 +106,6 @@
 
 <!-- HERO -->
 <header class="min-h-[88vh] flex flex-col items-center justify-center text-center px-4 pt-14">
-  <img src="logo.png" alt="Don Elio - Parrilla Argentina" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mb-4" style="box-shadow: 0 0 40px rgba(255,77,0,0.35)" />
   <h1 class="sr-only">Don Elio</h1>
   <p class="text-ember font-semibold text-base sm:text-lg tracking-widest uppercase mb-2">Parrilla · San Telmo</p>
   <p class="text-gray-100 max-w-xs sm:max-w-sm text-sm sm:text-base leading-relaxed mb-6">
@@ -451,12 +457,9 @@
       const precioHTML = fmt
         ? `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-gray-200">${fmt}</span>`
         : `<span class="${item.nota ? 'shrink-0 ml-2 ' : ''}text-ember text-xs font-semibold">${consultarLabel}</span>`;
-      const cutBadge = isCorte
-        ? ` <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-ember border border-ember/50 rounded-full px-1.5 py-0.5 align-middle">🔄 3D</span>`
-        : '';
       const nameHTML = item.nota
-        ? `<span class="flex flex-col"><span>${tr(item.plato)}${cutBadge}</span><span class="text-gray-300 text-xs">${tr(item.nota)}</span></span>`
-        : `<span>${tr(item.plato)}${cutBadge}</span>`;
+        ? `<span class="flex flex-col"><span>${tr(item.plato)}</span><span class="text-gray-300 text-xs">${tr(item.nota)}</span></span>`
+        : `<span>${tr(item.plato)}</span>`;
       const align = item.nota ? ' items-start' : '';
       return `<li class="menu-item flex justify-between${align} cursor-pointer hover:text-ember transition-colors" data-dish="${item.plato}" data-price="${waPrice}"${isCorte ? ' data-cut="1"' : ''}>${nameHTML}${precioHTML}</li>`;
     }).join('');
