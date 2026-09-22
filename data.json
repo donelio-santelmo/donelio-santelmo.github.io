@@ -4,7 +4,7 @@
   },
   "parrilla": {
     "label": "🥩 Parrilla",
-    "nota": "Todos incluyen guarnición · plato o sándwich",
+    "nota": "Todo incluye papas fritas",
     "items": [
       {
         "plato": "Chorizo",
@@ -16,11 +16,11 @@
       },
       {
         "plato": "Bondiola",
-        "precio": "11000"
+        "precio": "12000"
       },
       {
         "plato": "Cuadril",
-        "precio": "18000"
+        "precio": "19000"
       },
       {
         "plato": "Asado Banderita",
@@ -28,11 +28,11 @@
       },
       {
         "plato": "Vacío",
-        "precio": "18000"
+        "precio": "19000"
       },
       {
         "plato": "Parrillada",
-        "precio": "39000"
+        "precio": "40000"
       },
       {
         "plato": "Provoleta",
@@ -80,7 +80,7 @@
     "items": [
       {
         "plato": "Ensalada",
-        "precio": "3500"
+        "precio": "4000"
       },
       {
         "plato": "Papas Fritas",
@@ -109,7 +109,7 @@
       },
       {
         "plato": "Budín de Pan",
-        "precio": "4000"
+        "precio": "5000"
       },
       {
         "plato": "Flan",
