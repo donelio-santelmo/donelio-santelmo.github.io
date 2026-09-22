@@ -363,6 +363,23 @@
     'Parrillada': 'https://images.unsplash.com/photo-1774668748614-f188f5b61535?fm=jpg&q=75&w=1400&auto=format&fit=crop',
     'Provoleta': 'https://images.unsplash.com/photo-1661349008073-136bed6e6788?fm=jpg&q=75&w=1400&auto=format&fit=crop',
     'Matambre de cerdo': 'https://images.unsplash.com/photo-1690983325563-fe4412c4c347?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Milanesa': 'https://images.unsplash.com/photo-1599921841143-819065a55cc6?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Sopa Crema Casera': 'https://images.unsplash.com/photo-1757489345059-31d51e241a3e?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Rabas': 'https://images.unsplash.com/photo-1682264895449-f75b342cbab6?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Pastel de Carne': 'https://images.unsplash.com/photo-1650917331384-1fd06afa3230?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Guiso de Lentejas': 'https://images.unsplash.com/photo-1642497394078-4794e837019c?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Tallarines / Ravioles': 'https://images.unsplash.com/photo-1724041305855-704dad7d30b4?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Ensalada': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Papas Fritas': 'https://images.unsplash.com/photo-1606755456206-b25206cde27e?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Puré / Papas al Romero': 'https://images.unsplash.com/photo-1633959639799-6d3f66e05710?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Tiramisú': 'https://images.unsplash.com/photo-1746888151121-1002113ed286?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Bombón Escocés': 'https://images.unsplash.com/photo-1541754202-9eb0e8c13b6c?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Budín de Pan': 'https://images.unsplash.com/photo-1626256157372-17bd6f8e8d50?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Flan': 'https://images.unsplash.com/photo-1653988354010-39637252a2db?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Arroz con Leche': 'https://images.unsplash.com/photo-1606728099646-68d5a0a4d423?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Queso y Dulce': 'https://images.unsplash.com/photo-1589881133595-a3c085cb731d?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Café': 'https://images.unsplash.com/photo-1506372023823-741c83b836fe?fm=jpg&q=75&w=1400&auto=format&fit=crop',
+    'Té': 'https://images.unsplash.com/photo-1728931710220-45fa008628a9?fm=jpg&q=75&w=1400&auto=format&fit=crop',
   };
 
   function tr(s) {
@@ -476,14 +493,14 @@
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
             <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.mas.label)}</h3>
-            <ul class="space-y-2 text-sm">${renderItems(d.mas.items)}</ul>
+            <ul class="space-y-2 text-sm">${renderItems(d.mas.items, true)}</ul>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
             <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.acompanamiento.label)}</h3>
-            <ul class="space-y-2 text-sm mb-4">${renderItems(d.acompanamiento.items)}</ul>
+            <ul class="space-y-2 text-sm mb-4">${renderItems(d.acompanamiento.items, true)}</ul>
             <div class="border-t border-smoke/60 pt-3">
               <h3 class="text-ember font-bold text-xs tracking-widest uppercase mb-3">${tr(d.postres.label)}</h3>
-              <ul class="space-y-2 text-sm">${renderItems(d.postres.items)}</ul>
+              <ul class="space-y-2 text-sm">${renderItems(d.postres.items, true)}</ul>
             </div>
           </div>
           <div class="bg-ash border border-smoke rounded-xl p-5">
